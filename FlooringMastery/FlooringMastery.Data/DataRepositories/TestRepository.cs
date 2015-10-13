@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using FlooringMastery.Models;
@@ -10,14 +11,34 @@ namespace FlooringMastery.Data.DataRepositories
 {
     public class TestRepository : IDataRepository
     {
-        private const string _filePath = "Test";
+        private const string _filePath = @"DataFile\TestFiles";
 
-        public List<Order> GetDataInformation()
+
+        public string GetOrderDate(DateTime OrderDate)
         {
             List<Order> orders = new List<Order>();
 
-            //read all lines in file\Bank.txt
-            var reader = File.ReadAllLines("Test");
+            var newOrderDate = _filePath + "Orders_" + OrderDate + ".txt";
+
+            if (File.Exists(newOrderDate))
+            {
+                return newOrderDate;
+            }
+            
+                Console.WriteLine("That date does not match a a date in our files");
+                //wwrite this error to the error log
+                return null;
+               
+        }
+
+        public List<Order> GetDataInformation(DateTime OrderDate)
+        {
+           //we are getting all the orders of a specific date that exists in our files 
+           var orderFile =  GetOrderDate(OrderDate);
+            List<Order> orders = new List<Order>();
+
+            //read all orders that occur in orderFile, ie. on a specified date
+            var reader = File.ReadAllLines(orderFile);
 
             //i = 1 starts on line 1 not 0.
             for (int i = 1; i < reader.Length; i++)
@@ -38,7 +59,7 @@ namespace FlooringMastery.Data.DataRepositories
                 order.LaborCost = decimal.Parse(columns[9]);
                 order.Tax = decimal.Parse(columns[10]);
                 order.Total = decimal.Parse(columns[11]);
-                orders.Add(order);
+                
             }
 
             return orders;
@@ -46,3 +67,4 @@ namespace FlooringMastery.Data.DataRepositories
         }
     }
 }
+

@@ -10,14 +10,14 @@ namespace FlooringMastery.Data.DataRepositories
 {
     public class ProdRepository : IDataRepository
     {
-        private const string _filePath = "Prod";
+        private const string _filePath = @"DataFiles\ProdFile\";
 
         public List<Order> GetDataInformation()
         {
             List<Order> orders = new List<Order>();
 
             //read all lines in file\Bank.txt
-            var reader = File.ReadAllLines("Prod");
+            var reader = File.ReadAllLines(_filePath);
 
             //i = 1 starts on line 1 not 0.
             for (int i = 1; i < reader.Length; i++)

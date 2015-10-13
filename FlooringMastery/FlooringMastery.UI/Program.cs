@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FlooringMastery.BLL;
 using FlooringMastery.Models;
+using FlooringMastery.UI.Workflows;
 
 namespace FlooringMastery.UI
 {
@@ -15,9 +16,15 @@ namespace FlooringMastery.UI
         private static void Main(string[] args)
         {
 
-           OrderOperations orderOperations = new OrderOperations();
-           // orderOperations.ReadAllSettings();
-            orderOperations.AccessData();
+            //var menu = new MainMenu();
+            //menu.Execute();
+
+            //OrderOperations orderOperations = new OrderOperations();
+            // orderOperations.ReadAllSettings();
+            //var op = orderOperations.AccessData();
+
+          
+
             Console.ReadLine();
 
         }

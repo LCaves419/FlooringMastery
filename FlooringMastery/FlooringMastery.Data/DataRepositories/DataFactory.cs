@@ -11,7 +11,7 @@ namespace FlooringMastery.Data
 {
     public class DataFactory
     {
-        private static string _mode = ConfigurationManager.AppSettings["Options"];
+        private static string _mode = ConfigurationManager.AppSettings["Options"].ToUpper();
 
         public static IDataRepository CreateDataRepository()
         {
@@ -19,10 +19,8 @@ namespace FlooringMastery.Data
             {
                 case "Test":
                     return new TestRepository();
-                    break;
                 case "Prod":
                     return new ProdRepository();
-                    break;
                 default:
                     throw new NotSupportedException(String.Format("{0} not supported", _mode));
             }
