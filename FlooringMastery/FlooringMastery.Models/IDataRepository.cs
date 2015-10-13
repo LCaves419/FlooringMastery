@@ -8,6 +8,6 @@ namespace FlooringMastery.Models
 {
     public interface IDataRepository
     {
-        List<Order> GetDataInformation();
+        List<Order> GetDataInformation(DateTime OrderDate);
     }
 }

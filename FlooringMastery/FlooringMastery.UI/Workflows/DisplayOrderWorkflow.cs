@@ -16,7 +16,7 @@ namespace FlooringMastery.UI.Workflows
         {
             DateTime OrderDate = GetOrderDateFromUser();
             int OrderNumber = GetOrderNumberFromUser();
-            //DisplayOrderInformation(OrderNumber);
+            DisplayOrderInformation(OrderNumber);
 
         }
 
@@ -65,37 +65,37 @@ namespace FlooringMastery.UI.Workflows
             } while (true);
         }
 
-        //public void DisplayOrderInformation(int orderNumber)
-        //{
-        //    var ops = new OrderOperations();
-        //    var response = ops.GetAccount(accountNumber);
+        public void DisplayOrderInformation(int orderNumber)
+        {
+            var ops = new OrderOperations();
+            var response = ops.GetOrder(orderNumber);
 
-        //    if (response.Success)
-        //    {
-        //        _currentAccount = response.AccountInfo;
-        //        PrintAccountInformation(response.AccountInfo);
+            if (response.Success)
+            {
+                _currentAccount = response.AccountInfo;
+                PrintAccountInformation(response.AccountInfo);
 
-        //        DisplayAccountMenu();
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("Error occurred!!");
-        //        Console.WriteLine(response.Message);
-        //        Console.WriteLine("Press enter to continue...");
-        //        Console.ReadLine();
-        //    }
-        //}
+                DisplayAccountMenu();
+            }
+            else
+            {
+                Console.WriteLine("Error occurred!!");
+                Console.WriteLine(response.Message);
+                Console.WriteLine("Press enter to continue...");
+                Console.ReadLine();
+            }
+        }
 
-        //public void PrintAccountInformation(Account AccountInfo)
-        //{
-        //    Console.WriteLine("Account Information");
-        //    Console.WriteLine("----------------------");
-        //    Console.WriteLine("Account Number {0}", AccountInfo.AccountNumber);
-        //    Console.WriteLine("Name: {0}, {1}", AccountInfo.LastName, AccountInfo.FirstName);
-        //    Console.WriteLine("Account Balance: {0:c}", AccountInfo.Balance);
-        //    Console.WriteLine();
+        public void PrintAccountInformation(Account AccountInfo)
+        {
+            Console.WriteLine("Account Information");
+            Console.WriteLine("----------------------");
+            Console.WriteLine("Account Number {0}", AccountInfo.AccountNumber);
+            Console.WriteLine("Name: {0}, {1}", AccountInfo.LastName, AccountInfo.FirstName);
+            Console.WriteLine("Account Balance: {0:c}", AccountInfo.Balance);
+            Console.WriteLine();
 
-        //}
+        }
 
     }
 }

@@ -22,32 +22,14 @@ namespace FlooringMastery.BLL
             _repo = DataFactory.CreateDataRepository();
         }
 
-        public Response GetOrderDate(DateTime OrderDate)
+        public Response GetOrder(DateTime OrderDate, int orderNumber)
         {
-            
-        } 
-        public Response GetOrder(int OrderNumber)
-        {
-            
             var response = new Response();
-            //TODO: write GetOrder method in data layer- not sure which repository to put this in
-            var account = _repo.GetOrder(OrderNumber);
+            var order = _repo.GetDataInformation(OrderDate);
 
-            if (account == null)
-            {
-                response.Success = false;
-                response.Message = "This is not the account you are looking for...";
-            }
-            else
-            {
-                response.Success = true;
-                //TODO: finish this method- change Account info to ordeinfo after we do date 
-                //response.AccountInfo = account;
-            }
 
-            return response;
+
         }
-
 
 
         //var appSettings = ConfigurationManager.AppSettings;

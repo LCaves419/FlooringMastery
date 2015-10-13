@@ -11,7 +11,7 @@ namespace FlooringMastery.Data.DataRepositories
 {
     public class TestRepository : IDataRepository
     {
-        private const string _filePath = @"DataFile\TestFiles";
+        private const string _filePath = @"DataFile\TestFiles\";
 
 
         public string GetOrderDate(DateTime OrderDate)
@@ -64,6 +64,12 @@ namespace FlooringMastery.Data.DataRepositories
 
             return orders;
 
+        }
+
+        public Order GetOrder(DateTime OrderDate, int orderNumber)
+        {
+            List<Order> orders = GetDataInformation(OrderDate);
+            return orders.FirstOrDefault(a => a.OrderNumber == orderNumber);
         }
     }
 }
