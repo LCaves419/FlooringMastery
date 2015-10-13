@@ -52,9 +52,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DataFiles\Prod.txt" />
-    <Content Include="DataFiles\Test.txt" />
+    <Content Include="DataFiles\Test.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FlooringMastery.BLL\FlooringMastery.BLL.csproj">
+      <Project>{7f5479ae-af68-429c-a894-ffbdd9d5f4e9}</Project>
+      <Name>FlooringMastery.BLL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FlooringMastery.Data\FlooringMastery.Data.csproj">
       <Project>{e4f8c8e1-ba0f-4e86-ba15-be9529daa675}</Project>
       <Name>FlooringMastery.Data</Name>

@@ -5,23 +5,24 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FlooringMastery.Data;
+using FlooringMastery.BLL;
 using FlooringMastery.Models;
 
 namespace FlooringMastery.UI
 {
-   class Program
+    internal class Program
     {
-         static void Main(string[] args)
+        private static void Main(string[] args)
         {
 
-            OrderRepository repo = new OrderRepository();
+           OrderOperations orderOperations = new OrderOperations();
+           // orderOperations.ReadAllSettings();
+            orderOperations.AccessData();
+            Console.ReadLine();
 
-             Console.WriteLine(repo.GetAllOrders());
         }
     }
 }
-
        
   
 
