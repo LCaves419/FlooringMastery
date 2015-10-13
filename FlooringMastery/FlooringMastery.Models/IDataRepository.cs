@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlooringMastery.Data
+namespace FlooringMastery.Models
 {
-    class OrderRepository
+    public interface IDataRepository
     {
+        List<Order> GetDataInformation();
     }
 }

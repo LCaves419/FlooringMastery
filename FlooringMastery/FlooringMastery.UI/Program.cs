@@ -1,17 +1,27 @@
 ﻿using System.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FlooringMastery.Data;
+using FlooringMastery.Models;
 
 namespace FlooringMastery.UI
 {
-    class Program
+   class Program
     {
-        static void Main(string[] args)
+         static void Main(string[] args)
         {
-            ConfigurationManager.AppSettings["Test"];
+
+            OrderRepository repo = new OrderRepository();
+
+             Console.WriteLine(repo.GetAllOrders());
         }
     }
 }
+
+       
+  
+
