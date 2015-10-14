@@ -15,6 +15,7 @@ namespace FlooringMastery.Data.DataRepositories
 
         private string file;
 
+        //converts datetime to string format
         public string GetOrderFile(DateTime OrderDate)
         {
              var newOrderDate =  _filePath + "Orders_" + OrderDate.ToString("MMddyyyy") + ".txt";
@@ -25,12 +26,10 @@ namespace FlooringMastery.Data.DataRepositories
         }
 
 
-
+        //returns all orders of a specific date
         public List<Order> GetDataInformation(string file, int OrderNumber)
         {
-           //we are getting all the orders of a specific date that exists in our files 
-           
-            List<Order> orders = new List<Order>();
+           List<Order> orders = new List<Order>();
 
             //read all orders that occur in orderFile, ie. on a specified date
             var reader = File.ReadAllLines(file);
@@ -62,10 +61,25 @@ namespace FlooringMastery.Data.DataRepositories
 
         }
 
+        //finds correct order number from file
         public Order GetOrderNumber( string formattedOrderNumber, int OrderNumber)
         {
             List<Order> orders = GetDataInformation(formattedOrderNumber, OrderNumber);
             return orders.FirstOrDefault(a => a.OrderNumber == OrderNumber);
+        }
+
+        //if date folder exists we need to add new order to it
+        public void WriteNewLine(Order order, string formattedOrderNumber, int OrderNumber)
+        {
+            var orders = GetDataInformation(formattedOrderNumber, OrderNumber);
+            int newOrderNo = orders.Max(o => o.OrderNumber);
+            int newOrderNo1 = newOrderNo +1;
+
+            using (var writer = File.AppendText(_filePath))
+            {
+                writer.WriteLine("{0},{1},{2},{3}",, account.FirstName,
+                    account.LastName, account.Balance);
+            }
         }
     }
 }
