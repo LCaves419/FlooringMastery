@@ -21,5 +21,7 @@ namespace FlooringMastery.Models
         public decimal Tax { get; set; }
         public decimal Total { get; set; }
 
+        public DateTime OrderDate { get; set; }
+
     }
 }

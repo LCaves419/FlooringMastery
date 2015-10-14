@@ -45,6 +45,8 @@ namespace FlooringMastery.UI.Workflows
             switch (choice)
             {
                 case "1":
+                    DisplayOrderWorkflow dowf = new DisplayOrderWorkflow();
+                    dowf.Execute();
                    
                     break;
                 case "2":

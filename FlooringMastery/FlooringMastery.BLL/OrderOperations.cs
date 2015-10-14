@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -22,10 +23,24 @@ namespace FlooringMastery.BLL
             _repo = DataFactory.CreateDataRepository();
         }
 
-        public Response GetOrder(DateTime OrderDate, int orderNumber)
+        
+        public Response GetOrder( int orderNumber)
         {
             var response = new Response();
-            var order = _repo.GetDataInformation(OrderDate);
+           
+         
+            if (orderNumber != 0)
+            {
+                response.Success = true;
+                response.OrderInfo.OrderNumber = orderNumber;
+               
+            }
+           
+                response.Success = false;
+                response.Message = "This is not the Date you are looking for...";
+            
+
+            return response;
 
 
 
@@ -55,4 +70,4 @@ namespace FlooringMastery.BLL
         //}
 
     }
-}
+

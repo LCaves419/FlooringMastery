@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FlooringMastery.BLL;
 using FlooringMastery.Models;
+using FlooringMastery.Data;
 
 namespace FlooringMastery.UI.Workflows
 {
@@ -14,10 +15,10 @@ namespace FlooringMastery.UI.Workflows
 
         public void Execute()
         {
-            DateTime OrderDate = GetOrderDateFromUser();
+           // Order newOrder = new Order();
+            DateTime date = GetOrderDateFromUser();
             int OrderNumber = GetOrderNumberFromUser();
-            DisplayOrderInformation(OrderNumber);
-
+            DisplayOrderInformation(date, OrderNumber);
         }
 
 
@@ -32,7 +33,7 @@ namespace FlooringMastery.UI.Workflows
                 DateTime OrderDate;
                 if (DateTime.TryParse(input, out OrderDate))
                 {
-                    return OrderDate;
+                    return  OrderDate;
                 }
 
                 Console.WriteLine("That was not a valid order date....");
@@ -41,6 +42,8 @@ namespace FlooringMastery.UI.Workflows
                 Console.ReadLine();
 
             } while (true);
+
+           
         }
 
         public int GetOrderNumberFromUser()
@@ -65,18 +68,17 @@ namespace FlooringMastery.UI.Workflows
             } while (true);
         }
 
-        public void DisplayOrderInformation(int orderNumber)
+        public void DisplayOrderInformation(DateTime date, int orderNumber)
         {
             var ops = new OrderOperations();
             var response = ops.GetOrder(orderNumber);
 
             if (response.Success)
             {
-                _currentAccount = response.AccountInfo;
-                PrintAccountInformation(response.AccountInfo);
+                _currentOrder = response.OrderInfo;
+                PrintOrderInformation(response.OrderInfo);
 
-                DisplayAccountMenu();
-            }
+                }
             else
             {
                 Console.WriteLine("Error occurred!!");
@@ -86,13 +88,22 @@ namespace FlooringMastery.UI.Workflows
             }
         }
 
-        public void PrintAccountInformation(Account AccountInfo)
+        public void PrintOrderInformation(Order OrderInfo)
         {
             Console.WriteLine("Account Information");
             Console.WriteLine("----------------------");
-            Console.WriteLine("Account Number {0}", AccountInfo.AccountNumber);
-            Console.WriteLine("Name: {0}, {1}", AccountInfo.LastName, AccountInfo.FirstName);
-            Console.WriteLine("Account Balance: {0:c}", AccountInfo.Balance);
+            Console.WriteLine("Account Number {0}", OrderInfo.OrderNumber);
+            Console.WriteLine("Name: {0}", OrderInfo.LastName);
+            Console.WriteLine("State: {0}", OrderInfo.State);
+            Console.WriteLine("TaxRate: {0}", OrderInfo.TaxRate);
+            Console.WriteLine("ProductType: {0}", OrderInfo.ProductType);
+            Console.WriteLine("Area: {0}", OrderInfo.Area);
+            Console.WriteLine("Cost Per Square Foot: {0}", OrderInfo.CostSqFt);
+            Console.WriteLine("Labor Per Square Foot: {0}", OrderInfo.LaborSqFt);
+            Console.WriteLine("Material Cost: {0}", OrderInfo.MaterialCost);
+            Console.WriteLine("Labor Cost: {0}", OrderInfo.LaborCost);
+            Console.WriteLine("Tax: {0}", OrderInfo.Tax);
+            Console.WriteLine("Total: {0:c}", OrderInfo.Total);
             Console.WriteLine();
 
         }
