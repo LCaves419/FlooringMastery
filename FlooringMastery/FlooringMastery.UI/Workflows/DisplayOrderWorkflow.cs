@@ -12,17 +12,19 @@ namespace FlooringMastery.UI.Workflows
     public class DisplayOrderWorkflow
     {
         private Order _currentOrder;
+        private string file;
+        private int OrderNumber;
 
         public void Execute()
         {
            // Order newOrder = new Order();
-            DateTime date = GetOrderDateFromUser();
-            int OrderNumber = GetOrderNumberFromUser();
-            DisplayOrderInformation(date, OrderNumber);
+            file = GetOrderDateFromUser();
+            OrderNumber = GetOrderNumberFromUser();
+            DisplayOrderInformation(file, OrderNumber);
         }
 
 
-        public DateTime GetOrderDateFromUser()
+        public string GetOrderDateFromUser()
         {
             do
             {
@@ -33,7 +35,9 @@ namespace FlooringMastery.UI.Workflows
                 DateTime OrderDate;
                 if (DateTime.TryParse(input, out OrderDate))
                 {
-                    return  OrderDate;
+                   OrderOperations ops = new OrderOperations();
+                   var formattedOrderDate= ops.GetOrderDate(OrderDate);
+                    return  formattedOrderDate;
                 }
 
                 Console.WriteLine("That was not a valid order date....");
@@ -43,7 +47,7 @@ namespace FlooringMastery.UI.Workflows
 
             } while (true);
 
-           
+          
         }
 
         public int GetOrderNumberFromUser()
@@ -68,14 +72,17 @@ namespace FlooringMastery.UI.Workflows
             } while (true);
         }
 
-        public void DisplayOrderInformation(DateTime date, int orderNumber)
+        public void DisplayOrderInformation(string file, int orderNumber)
         {
             var ops = new OrderOperations();
-            var response = ops.GetOrder(orderNumber);
+            //string formattedDate = GetOrderDateFromUser();
+            int num = GetOrderNumberFromUser();
+            var response = ops.GetOrder(file, num);
+            _currentOrder = response.OrderInfo;
 
             if (response.Success)
             {
-                _currentOrder = response.OrderInfo;
+                //_currentOrder = response.OrderInfo;
                 PrintOrderInformation(response.OrderInfo);
 
                 }

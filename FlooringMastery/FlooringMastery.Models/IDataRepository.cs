@@ -8,7 +8,8 @@ namespace FlooringMastery.Models
 {
     public interface IDataRepository
     {
-        List<Order> GetDataInformation(int OrderNumber);
-        //string GetOrderFile(DateTime OrderDate);
+        List<Order> GetDataInformation(string file, int OrderNumber);
+        string GetOrderFile(DateTime OrderDate);
+       Order GetOrderNumber(string formattedOrderNumber, int OrderNumber);
     }
 }

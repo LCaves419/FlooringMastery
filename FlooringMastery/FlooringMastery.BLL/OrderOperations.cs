@@ -14,60 +14,57 @@ namespace FlooringMastery.BLL
 {
     public class OrderOperations
     {
-
+       // private DateTime orderDate;
         private IDataRepository _repo;
 
         //our constructor
         public OrderOperations()
         {
             _repo = DataFactory.CreateDataRepository();
+
         }
 
-        
-        public Response GetOrder( int orderNumber)
+        public string GetOrderDate(DateTime OrderDate)
+        {
+            List<Order> order = new List<Order>();
+            Response response = new Response();
+            string newFileName = _repo.GetOrderFile(OrderDate);
+
+            if (File.Exists(newFileName))
+            {
+               
+                return newFileName;
+               
+
+            }
+           // Console.WriteLine("That date does not match a a date in our files");
+            //write this error to the error log
+            return "That date does not match a a date in our files";
+        }
+
+
+
+        public Response GetOrder(string newFileName, int orderNumber)
         {
             var response = new Response();
+            var order = _repo.GetOrderNumber(newFileName, orderNumber);
            
-         
-            if (orderNumber != 0)
+            
+            if (order != null)
             {
                 response.Success = true;
-                response.OrderInfo.OrderNumber = orderNumber;
-               
+                response.OrderInfo = order;
             }
-           
+            else
+            {
                 response.Success = false;
                 response.Message = "This is not the Date you are looking for...";
+            }   
             
-
             return response;
-
-
-
         }
 
-
-        //var appSettings = ConfigurationManager.AppSettings;
-
-        //if (appSettings.Count == 0)
-        //{
-        //    Console.WriteLine("AppSettings is empty.");
-        //}
-        //else
-        //{
-        //    foreach (var key in appSettings.AllKeys)
-        //    {
-        //        Console.WriteLine("Key: {0} Value: {1}", key, appSettings[key]);
-        //    }
-        //}
-
     }
-
-        //public Order AccessData(Order order)
-        //{
-        //    TestDataRepository testDataRepository = new TestDataRepository();
-        //    return testDataRepository.GetDataInformation();
-        //}
-
-    }
+   
+}
 

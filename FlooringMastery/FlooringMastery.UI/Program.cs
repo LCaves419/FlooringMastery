@@ -14,14 +14,14 @@ namespace FlooringMastery.UI
         private static void Main(string[] args)
         {
 
-            //var menu = new MainMenu();
-            //menu.Execute();
+            var menu = new MainMenu();
+            menu.Execute();
 
             //OrderOperations orderOperations = new OrderOperations();
             // orderOperations.ReadAllSettings();
             //var op = orderOperations.AccessData();
 
-          
+
 
             Console.ReadLine();
 

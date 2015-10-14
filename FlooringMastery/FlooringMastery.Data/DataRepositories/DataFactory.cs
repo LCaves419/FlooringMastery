@@ -17,9 +17,9 @@ namespace FlooringMastery.Data
         {
             switch (_mode)
             {
-                case "Test":
+                case "TEST":
                     return new TestRepository();
-                case "Prod":
+                case "PROD":
                     return new ProdRepository();
                 default:
                     throw new NotSupportedException(String.Format("{0} not supported", _mode));

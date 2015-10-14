@@ -11,39 +11,29 @@ namespace FlooringMastery.Data.DataRepositories
 {
     public class TestRepository : IDataRepository
     {
-        private const string _filePath = @"DataFile\TestFiles\";
+        private const string _filePath = @"DataFiles\TestFiles\";
 
         private string file;
+
         public string GetOrderFile(DateTime OrderDate)
         {
-            //List<Order> orders = new List<Order>();
-
-            string newOrderDate1 = OrderDate.ToString("ddMMyyyy");
-            var newOrderDate = _filePath + "Orders_" + newOrderDate1 + ".txt";
-
-
-            var newOrderDate2 = _filePath + "Orders_" + OrderDate + ".txt";
-            
-
-            if (File.Exists(newOrderDate))
-            {
-                file = newOrderDate;
+             var newOrderDate =  _filePath + "Orders_" + OrderDate.ToString("MMddyyyy") + ".txt";
+            file = newOrderDate;
             return newOrderDate;
-                
-            }
-            Console.WriteLine("That date does not match a a date in our files");
-            //write this error to the error log
-            return null;
+            //return _filePath.FirstOrDefault(a => a. == orderNumber);
+
         }
 
-        public List<Order> GetDataInformation(int OrderNumber)
+
+
+        public List<Order> GetDataInformation(string file, int OrderNumber)
         {
            //we are getting all the orders of a specific date that exists in our files 
-           var orderFile =  file;
+           
             List<Order> orders = new List<Order>();
 
             //read all orders that occur in orderFile, ie. on a specified date
-            var reader = File.ReadAllLines(orderFile);
+            var reader = File.ReadAllLines(file);
 
             //i = 1 starts on line 1 not 0.
             for (int i = 1; i < reader.Length; i++)
@@ -72,10 +62,10 @@ namespace FlooringMastery.Data.DataRepositories
 
         }
 
-        public Order GetOrder(DateTime OrderDate, int orderNumber)
+        public Order GetOrderNumber( string formattedOrderNumber, int OrderNumber)
         {
-            List<Order> orders = GetDataInformation(orderNumber);
-            return orders.FirstOrDefault(a => a.OrderNumber == orderNumber);
+            List<Order> orders = GetDataInformation(formattedOrderNumber, OrderNumber);
+            return orders.FirstOrDefault(a => a.OrderNumber == OrderNumber);
         }
     }
 }
