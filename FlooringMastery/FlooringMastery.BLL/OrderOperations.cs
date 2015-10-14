@@ -69,9 +69,10 @@ namespace FlooringMastery.BLL
             Order newOrder = new Order();
             Response response = new Response();
 
-            newOrder.OrderNumber = 1;
+            int orderNum = newOrder.OrderNumber = 1;
 
-            int returnedOrdernumber = _repo.WriteNewLine(newOrder);
+             _repo.WriteNewLine(newOrder,formattedDate,orderNum);
+            return response;
 
 
         }
@@ -87,7 +88,7 @@ namespace FlooringMastery.BLL
             if (File.Exists(formattedDate))
             {
 
-                CreateOrder(formattedDate);
+                response = CreateOrder(formattedDate);
                 return formattedDate;
 
 
