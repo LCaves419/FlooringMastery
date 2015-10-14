@@ -12,7 +12,7 @@ namespace FlooringMastery.Data.DataRepositories
     {
         private const string _filePath = @"DataFiles\Test.txt";
 
-        public List<Order> GetDataInformation()
+        public List<Order> GetDataInformation(int orderNumber)
         {
             List<Order> orders = new List<Order>();
 
