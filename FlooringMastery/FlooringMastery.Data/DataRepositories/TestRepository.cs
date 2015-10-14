@@ -17,8 +17,8 @@ namespace FlooringMastery.Data.DataRepositories
         public string GetOrderFile(DateTime OrderDate)
         {
             //List<Order> orders = new List<Order>();
-
-            var newOrderDate = _filePath + "Orders_" + OrderDate + ".txt";
+            string newOrderDate1 = OrderDate.ToString("ddMMyyyy");
+            var newOrderDate = _filePath + "Orders_" + newOrderDate1 + ".txt";
             if (File.Exists(newOrderDate))
             {
                 file = newOrderDate;
