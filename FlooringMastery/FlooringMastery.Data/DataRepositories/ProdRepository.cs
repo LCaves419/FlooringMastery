@@ -103,5 +103,15 @@ namespace FlooringMastery.Data.DataRepositories
             }
             return formattedDate;
         }
+
+        public int DeleteOrder(string formattedDate, int orderNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IDataRepository.DeleteOrder(string formattedDate, int orderNumber)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

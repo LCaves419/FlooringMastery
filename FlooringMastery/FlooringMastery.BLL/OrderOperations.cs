@@ -71,6 +71,11 @@ namespace FlooringMastery.BLL
         }
 
         //checking to see if there is already a date file
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="currentDate"></param>
+        /// <returns></returns>
         public string CheckFileDate(DateTime currentDate)
         {
             string formattedDate = _repo.GetOrderFile(currentDate);
@@ -97,6 +102,13 @@ namespace FlooringMastery.BLL
 
 
             }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="formattedDate"></param>
+        /// <returns></returns>
         public Response NewCustomerInformationResponse(Order order, string formattedDate)
         { 
             var response = new Response();
@@ -107,6 +119,36 @@ namespace FlooringMastery.BLL
             return response;
 
        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="formattedDate"></param>
+        /// <param name="orderNumber"></param>
+        /// <returns></returns>
+        public Response OrderToDelete(string formattedDate, int orderNumber)
+        {
+            var response = new Response();
+           
+           // Order deletedOrder = _repo.GetOrderNumber(formattedDate, orderNumber);
+            bool deletedNum = _repo.DeleteOrder(formattedDate, orderNumber);
+
+            if (deletedNum)
+            {
+                response.Success = true;
+                response.Message = "The order you were trying to delete has been successfully deleted.";
+
+            }
+            else
+            {
+                //need to do as TRY CATCH ---IF reach here wil have entered something other than an order num
+                response.Success = false;
+                response.Message = "You were not able to delete that order.";
+            }
+
+            return response;
+        }
+    
     }
 
     

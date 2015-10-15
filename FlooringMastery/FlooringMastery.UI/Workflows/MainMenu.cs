@@ -60,8 +60,10 @@ namespace FlooringMastery.UI.Workflows
                     Console.ReadLine();
                     break;
                 case "4":
-                    Console.WriteLine("This feature is not implemented yet!");
-                    Console.WriteLine("Press enter to continue...");
+                    //Console.WriteLine("This feature is not implemented yet!");
+                    //Console.WriteLine("Press enter to continue...");
+                    RemoveOrderWorkflow rowf = new RemoveOrderWorkflow();
+                    rowf.Execute();
                     Console.ReadLine();
                     break;
                default:

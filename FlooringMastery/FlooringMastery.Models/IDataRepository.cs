@@ -13,5 +13,6 @@ namespace FlooringMastery.Models
         Order GetOrderNumber(string formattedOrderNumber, int OrderNumber);
         void WriteNewLine(Order order, string formattedDate);
         string CreateFile(DateTime currentDate);
+        bool DeleteOrder(string formattedDate, int orderNumber);
     }
 }

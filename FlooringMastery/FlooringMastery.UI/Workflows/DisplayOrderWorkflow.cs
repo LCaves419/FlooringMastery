@@ -70,7 +70,7 @@ namespace FlooringMastery.UI.Workflows
             } while (true);
         }
 
-        public void DisplayOrderInformation(string file, int orderNumber)
+        public Order DisplayOrderInformation(string file, int orderNumber)
         {
             var ops = new OrderOperations();
             //string formattedDate = GetOrderDateFromUser();
@@ -82,6 +82,7 @@ namespace FlooringMastery.UI.Workflows
             {
                 //_currentOrder = response.OrderInfo;
                 PrintOrderInformation(response.OrderInfo);
+                return _currentOrder;
 
                 }
             else
@@ -90,6 +91,7 @@ namespace FlooringMastery.UI.Workflows
                 Console.WriteLine(response.Message);
                 Console.WriteLine("Press enter to continue...");
                 Console.ReadLine();
+                return null;
             }
         }
 

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using FlooringMastery.Models;
 
 namespace FlooringMastery.Data.DataRepositories
@@ -12,13 +13,13 @@ namespace FlooringMastery.Data.DataRepositories
     public class TestRepository : IDataRepository
     {
         private const string _filePath = @"DataFiles\TestFiles\";
-
         private string file;
-
+        //DataFiles\TestFiles\    .txt
         //converts datetime to string format
         public string GetOrderFile(DateTime OrderDate)
         {
              var newOrderDate =  _filePath + "Orders_" + OrderDate.ToString("MMddyyyy") + ".txt";
+           
             file = newOrderDate;
             return newOrderDate;
             //return _filePath.FirstOrDefault(a => a. == orderNumber);
@@ -58,25 +59,27 @@ namespace FlooringMastery.Data.DataRepositories
         }
 
         //finds correct order number from file
-        public Order GetOrderNumber( string formattedOrderNumber, int OrderNumber)
+        public Order GetOrderNumber( string formattedDate, int OrderNumber)
         {
-            List<Order> orders = GetDataInformation(formattedOrderNumber);
+            List<Order> orders = GetDataInformation(formattedDate);
             return orders.FirstOrDefault(a => a.OrderNumber == OrderNumber);
         }
 
         //if date folder exists we need to add new order to it
         public void WriteNewLine(Order order, string formattedDate)
         {
-            //Order order1 = new Order();
-            //need to get order number first
-           List<Order> orders = GetDataInformation(formattedDate); 
-            int newOrderNo = orders.Max(o => o.OrderNumber) +1;
-            order.OrderNumber = newOrderNo;
-            //int newOrderNo1 = newOrderNo +1;
+            List<Order> orders = GetDataInformation(formattedDate);
+            int newOrderNo = 1;
+            if (orders.Count > 1)
+            {
+                newOrderNo = orders.Max(o => o.OrderNumber) + 1;
+            }
 
+            order.OrderNumber = newOrderNo;
+          
             using (var writer = File.AppendText(formattedDate))
             {
-                writer.Write("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}",order.OrderNumber, order.LastName,
+                writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}",order.OrderNumber, order.LastName,
                     order.State, order.TaxRate, order.ProductType, order.Area, order.CostSqFt,
                     order.LaborSqFt, order.MaterialCost, order.LaborCost, order.Tax, order.Total);
                 //OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,
@@ -91,11 +94,50 @@ namespace FlooringMastery.Data.DataRepositories
             //var newDateFile = _filePath + "Orders_" + formattedDate.ToString("MMddyyyy") + ".txt";
             using (StreamWriter writer = new StreamWriter(formattedDate))
             {
-                writer.Write("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},\n {12}","OrderNumber","CustomerName","State","TaxRate","ProductType","Area","CostPerSquareFoot",
-                "LaborCostPerSquareFoot","MaterialCost","LaborCost","Tax","Total",1);
+                writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}, {12}","OrderNumber","CustomerName","State","TaxRate","ProductType","Area","CostPerSquareFoot",
+                "LaborCostPerSquareFoot","MaterialCost","LaborCost","Tax","Total");
                 //go from here to BLL 
             }
             return formattedDate;
+        }
+
+        public bool DeleteOrder(string formattedDate, int orderNumber)
+        {
+           
+            List<Order> orders = GetDataInformation(formattedDate);
+            
+            string FileOnly = formattedDate.Substring(formattedDate.Length -19);
+            var result = from o in orders
+                where o.OrderNumber != orderNumber
+                select o;
+            //if result.count > 0 
+            if (orders.Count() > 1)
+            {
+                File.WriteAllText(file,result.ToString());
+                return true;
+            }
+            else if (orders.Count() == 1)
+            {
+                try
+                {
+                    System.IO.File.Delete(formattedDate);
+                }
+                catch (System.IO.IOException e)
+                {
+                    Console.WriteLine(e.Message);
+                    return false;
+                }
+                
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+           
+              
+            
+          
         }
     }
 }
