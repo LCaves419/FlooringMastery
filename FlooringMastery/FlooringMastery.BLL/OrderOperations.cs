@@ -64,47 +64,42 @@ namespace FlooringMastery.BLL
             return response;
         }
 
-        public Response CreateOrder(string formattedDate)
+        public void CreateOrder(Order order, string formattedDate)
         {
-            Order newOrder = new Order();
             Response response = new Response();
-
-            int orderNum = newOrder.OrderNumber = 0;
-
-             _repo.WriteNewLine(newOrder,formattedDate,orderNum);
-            return response;
-
-
+            _repo.WriteNewLine(order, formattedDate);
         }
 
         //checking to see if there is already a date file
         public string CheckFileDate(DateTime currentDate)
         {
-           string formattedDate = _repo.GetOrderFile(currentDate);
+            string formattedDate = _repo.GetOrderFile(currentDate);
             List<Order> order = new List<Order>();
             Response response = new Response();
+            Order newOrder = new Order();
 
-
-            if (File.Exists(formattedDate))
+            if (!File.Exists(formattedDate))
             {
+                //newOrder.OrderNumber = 1;
+                string formattedDateNew = _repo.CreateFile(currentDate);
+                return formattedDateNew;
+            }
 
-                response = CreateOrder(formattedDate);
+            else
+            {
+                _repo.WriteNewLine(newOrder, formattedDate);
                 return formattedDate;
 
             }
-            else
-            {
 
-
-                // Console.WriteLine("That date does not match a a date in our files");
+            // Console.WriteLine("That date does not match a a date in our files");
                 //write this error to the error log
 
-                string formattedDateNew = _repo.CreateFile(currentDate);
-                return formattedDateNew;
+
             }
         }
 
     }
    
-}
+
 

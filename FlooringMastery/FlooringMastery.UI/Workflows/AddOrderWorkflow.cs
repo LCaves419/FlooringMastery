@@ -16,41 +16,72 @@ namespace FlooringMastery.UI.Workflows
 
         public void Execute()
         {
-            CreateDate();
-            OpenOrder();
+            formattedDate = CreateDate();
+            PopulateOrder(formattedDate);
         }
 
 
-        public void CreateDate()
+        public string CreateDate()
         {
            
             DateTime currentDate = DateTime.Now;
             OrderOperations ops = new OrderOperations();
 
             formattedDate = ops.CheckFileDate(currentDate);
+            return formattedDate;
         }
 
         //calls CreateOrder and stores a Order in response.
-        public void OpenOrder()
+        public void PopulateOrder(string formattedDate)
         {
             OrderOperations ops = new OrderOperations();
-            var response = ops.CreateOrder(formattedDate);
+            var response = new Response();
 
             Console.WriteLine("Account Information");
             Console.WriteLine("----------------------");
-            Console.WriteLine("Account Number {0}", response.OrderInfo.OrderNumber);
-            Console.WriteLine("Name: {0}", response.OrderInfo.LastName);
-            Console.WriteLine("State: {0}",response.OrderInfo.State);
-            Console.WriteLine("TaxRate: {0}",response.OrderInfo.TaxRate);
-            Console.WriteLine("ProductType: {0}",response.OrderInfo.ProductType);
-            Console.WriteLine("Area: {0}",response.OrderInfo.Area);
-            Console.WriteLine("Cost Per Square Foot: {0}",response.OrderInfo.CostSqFt);
-            Console.WriteLine("Labor Per Square Foot: {0}", response.OrderInfo.LaborSqFt);
-            Console.WriteLine("Material Cost: {0}", response.OrderInfo.MaterialCost);
-            Console.WriteLine("Labor Cost: {0}", response.OrderInfo.LaborCost);
-            Console.WriteLine("Tax: {0}", response.OrderInfo.Tax);
-            Console.WriteLine("Total: {0:c}",response.OrderInfo.Total);
+           
+            Console.WriteLine("Enter Last Name: ");
+            response.OrderInfo.LastName = Console.ReadLine();
+            Console.WriteLine("State: ");
+            response.OrderInfo.State = Console.ReadLine();
+            Console.WriteLine("TaxRate: ");
+            var input = Console.ReadLine();
+            response.OrderInfo.TaxRate = System.Convert.ToDecimal(input);     
+
+            Console.WriteLine("ProductType: ");
+            response.OrderInfo.ProductType = Console.ReadLine();
+
+            Console.WriteLine("Area: ");
+            var input1 = Console.ReadLine();
+            response.OrderInfo.Area = System.Convert.ToDecimal(input);
+
+            Console.WriteLine("Cost Per Square Foot: ");
+            var input2 = Console.ReadLine();
+            response.OrderInfo.CostSqFt = System.Convert.ToDecimal(input);
+
+            Console.WriteLine("Labor Per Square Foot: ");
+            var input3 = Console.ReadLine();
+            response.OrderInfo.LaborSqFt = System.Convert.ToDecimal(input);
+
+            Console.WriteLine("Material Cost: ");
+            var input4 = Console.ReadLine();
+            response.OrderInfo.MaterialCost = System.Convert.ToDecimal(input);
+
+            Console.WriteLine("Labor Cost: "); 
+            var input5 = Console.ReadLine();
+            response.OrderInfo.LaborCost = System.Convert.ToDecimal(input);
+
+            Console.WriteLine("Tax: ");
+            var input6 = Console.ReadLine();
+            response.OrderInfo.Tax = System.Convert.ToDecimal(input);
+
+            Console.WriteLine("Total: ");  
+            var input7 = Console.ReadLine();
+            response.OrderInfo.Total = System.Convert.ToDecimal(input);
             Console.WriteLine();
+
+            ops.CreateOrder(response.OrderInfo, formattedDate);
+            
         }
 
     }

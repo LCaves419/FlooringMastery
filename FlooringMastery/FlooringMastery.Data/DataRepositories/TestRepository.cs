@@ -53,7 +53,6 @@ namespace FlooringMastery.Data.DataRepositories
                 order.Total = decimal.Parse(columns[11]);
 
                 orders.Add(order);
-                
             }
             return orders;
         }
@@ -66,15 +65,17 @@ namespace FlooringMastery.Data.DataRepositories
         }
 
         //if date folder exists we need to add new order to it
-        public void WriteNewLine(Order order, string formattedDate, int OrderNumber)
+        public void WriteNewLine(Order order, string formattedDate)
         {
-            var orders = GetDataInformation(formattedDate, OrderNumber);
-            int newOrderNo = orders.Max(o => o.OrderNumber);
-            int newOrderNo1 = newOrderNo +1;
+            //need to get order number first
+           // var orders = GetDataInformation(formattedDate); //passing fake order number here
+            //int newOrderNo = order.Max(o => o.OrderNumber);
+            //int newOrderNo1 = newOrderNo +1;
+            
 
             using (var writer = File.AppendText(formattedDate))
             {
-                writer.Write("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}",newOrderNo1, order.LastName,
+                writer.Write("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}",order.OrderNumber, order.LastName,
                     order.State, order.TaxRate, order.ProductType, order.Area, order.CostSqFt,
                     order.LaborSqFt, order.MaterialCost, order.LaborCost, order.Tax, order.Total);
                 //OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,
@@ -89,8 +90,9 @@ namespace FlooringMastery.Data.DataRepositories
             //var newDateFile = _filePath + "Orders_" + formattedDate.ToString("MMddyyyy") + ".txt";
             using (StreamWriter writer = new StreamWriter(formattedDate))
             {
-                writer.Write("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}","OrderNumber","CustomerName","State","TaxRate","ProductType","Area","CostPerSquareFoot",
-                "LaborCostPerSquareFoot","MaterialCost","LaborCost","Tax","Total");
+                writer.Write("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},\n {12}","OrderNumber","CustomerName","State","TaxRate","ProductType","Area","CostPerSquareFoot",
+                "LaborCostPerSquareFoot","MaterialCost","LaborCost","Tax","Total",1);
+                //go from here to BLL 
             }
             return formattedDate;
         }
