@@ -65,39 +65,34 @@ namespace FlooringMastery.Data.DataRepositories
             return orders.FirstOrDefault(a => a.OrderNumber == OrderNumber);
         }
 
-        //Create Account SGBANK
-        //public int WriteNewLine(Account account)
-        //{
-        //    //write a new line a way to calculate new line number
-        //    var accounts = GetAllAccounts();
-        //    int newAccountNumber = accounts.Count + 1;//+1 will be the new acct number
-
-        //    using (var writer = File.AppendText(_filePath))//appends to the end of existing file
-        //    {
-        //        writer.WriteLine("{0},{1},{2},{3}", newAccountNumber, account.FirstName,
-        //                account.LastName, account.Balance);
-        //    }
-
-        //    return newAccountNumber;
-        //}
-
-
         //if date folder exists we need to add new order to it
-        public void WriteNewLine(Order order, string formattedOrderNumber, int OrderNumber)
+        public void WriteNewLine(Order order, string formattedDate, int OrderNumber)
         {
-            var orders = GetDataInformation(formattedOrderNumber, OrderNumber);
+            var orders = GetDataInformation(formattedDate, OrderNumber);
             int newOrderNo = orders.Max(o => o.OrderNumber);
             int newOrderNo1 = newOrderNo +1;
 
-            using (var writer = File.AppendText(formattedOrderNumber))
+            using (var writer = File.AppendText(formattedDate))
             {
-                writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10}",newOrderNo1, order.LastName,
+                writer.Write("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}",newOrderNo1, order.LastName,
                     order.State, order.TaxRate, order.ProductType, order.Area, order.CostSqFt,
-                    order.LaborSqFt, order.MaterialCost, order.Tax, order.Total);
+                    order.LaborSqFt, order.MaterialCost, order.LaborCost, order.Tax, order.Total);
                 //OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,
                 //LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
                 //1,Wise,OH,6.25,Wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88
             }
+        }
+
+        public string CreateFile(DateTime currentDate)
+        {
+            string formattedDate = GetOrderFile(currentDate);
+            //var newDateFile = _filePath + "Orders_" + formattedDate.ToString("MMddyyyy") + ".txt";
+            using (StreamWriter writer = new StreamWriter(formattedDate))
+            {
+                writer.Write("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}","OrderNumber","CustomerName","State","TaxRate","ProductType","Area","CostPerSquareFoot",
+                "LaborCostPerSquareFoot","MaterialCost","LaborCost","Tax","Total");
+            }
+            return formattedDate;
         }
     }
 }

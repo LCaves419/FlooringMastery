@@ -14,21 +14,18 @@ namespace FlooringMastery.Data.DataRepositories
 
         private string file;
 
+        //converts datetime to string format
         public string GetOrderFile(DateTime OrderDate)
         {
             var newOrderDate = _filePath + "Orders_" + OrderDate.ToString("MMddyyyy") + ".txt";
             file = newOrderDate;
             return newOrderDate;
             //return _filePath.FirstOrDefault(a => a. == orderNumber);
-
         }
 
-
-
+        //returns all orders of a specific date
         public List<Order> GetDataInformation(string file, int OrderNumber)
         {
-            //we are getting all the orders of a specific date that exists in our files 
-
             List<Order> orders = new List<Order>();
 
             //read all orders that occur in orderFile, ie. on a specified date
@@ -58,13 +55,43 @@ namespace FlooringMastery.Data.DataRepositories
 
             }
             return orders;
-
         }
 
+        //finds correct order number from file
         public Order GetOrderNumber(string formattedOrderNumber, int OrderNumber)
         {
             List<Order> orders = GetDataInformation(formattedOrderNumber, OrderNumber);
             return orders.FirstOrDefault(a => a.OrderNumber == OrderNumber);
+        }
+
+        //if date folder exists we need to add new order to it
+        public void WriteNewLine(Order order, string formattedDate, int OrderNumber)
+        {
+            var orders = GetDataInformation(formattedDate, OrderNumber);
+            int newOrderNo = orders.Max(o => o.OrderNumber);
+            int newOrderNo1 = newOrderNo + 1;
+
+            using (var writer = File.AppendText(formattedDate))
+            {
+                writer.Write("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", newOrderNo1, order.LastName,
+                    order.State, order.TaxRate, order.ProductType, order.Area, order.CostSqFt,
+                    order.LaborSqFt, order.MaterialCost, order.LaborCost, order.Tax, order.Total);
+                //OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,
+                //LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
+                //1,Wise,OH,6.25,Wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88
+            }
+        }
+
+        public string CreateFile(DateTime currentDate)
+        {
+            string formattedDate = GetOrderFile(currentDate);
+            //var newDateFile = _filePath + "Orders_" + formattedDate.ToString("MMddyyyy") + ".txt";
+            using (StreamWriter writer = new StreamWriter(formattedDate))
+            {
+                writer.Write("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", "OrderNumber", "CustomerName", "State", "TaxRate", "ProductType", "Area", "CostPerSquareFoot",
+                "LaborCostPerSquareFoot", "MaterialCost", "LaborCost", "Tax", "Total");
+            }
+            return formattedDate;
         }
     }
 }

@@ -69,7 +69,7 @@ namespace FlooringMastery.BLL
             Order newOrder = new Order();
             Response response = new Response();
 
-            int orderNum = newOrder.OrderNumber = 1;
+            int orderNum = newOrder.OrderNumber = 0;
 
              _repo.WriteNewLine(newOrder,formattedDate,orderNum);
             return response;
@@ -83,7 +83,7 @@ namespace FlooringMastery.BLL
            string formattedDate = _repo.GetOrderFile(currentDate);
             List<Order> order = new List<Order>();
             Response response = new Response();
-           
+
 
             if (File.Exists(formattedDate))
             {
@@ -91,11 +91,17 @@ namespace FlooringMastery.BLL
                 response = CreateOrder(formattedDate);
                 return formattedDate;
 
-
             }
-            // Console.WriteLine("That date does not match a a date in our files");
-            //write this error to the error log
-            return "That date does not match a a date in our files";
+            else
+            {
+
+
+                // Console.WriteLine("That date does not match a a date in our files");
+                //write this error to the error log
+
+                string formattedDateNew = _repo.CreateFile(currentDate);
+                return formattedDateNew;
+            }
         }
 
     }

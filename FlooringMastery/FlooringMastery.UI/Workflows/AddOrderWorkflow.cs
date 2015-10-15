@@ -11,18 +11,19 @@ namespace FlooringMastery.UI.Workflows
     public class AddOrderWorkflow
     {
 
-       private Order _currentOrder;
+       //private Order _currentOrder;
         private string formattedDate;
 
         public void Execute()
         {
+            CreateDate();
             OpenOrder();
         }
 
 
         public void CreateDate()
         {
-           // DateTime parseDate;
+           
             DateTime currentDate = DateTime.Now;
             OrderOperations ops = new OrderOperations();
 
