@@ -25,7 +25,7 @@ namespace FlooringMastery.Data.DataRepositories
         }
 
         //returns all orders of a specific date
-        public List<Order> GetDataInformation(string file, int OrderNumber)
+        public List<Order> GetDataInformation(string file)
         {
            List<Order> orders = new List<Order>();
 
@@ -60,18 +60,19 @@ namespace FlooringMastery.Data.DataRepositories
         //finds correct order number from file
         public Order GetOrderNumber( string formattedOrderNumber, int OrderNumber)
         {
-            List<Order> orders = GetDataInformation(formattedOrderNumber, OrderNumber);
+            List<Order> orders = GetDataInformation(formattedOrderNumber);
             return orders.FirstOrDefault(a => a.OrderNumber == OrderNumber);
         }
 
         //if date folder exists we need to add new order to it
         public void WriteNewLine(Order order, string formattedDate)
         {
+            //Order order1 = new Order();
             //need to get order number first
-           // var orders = GetDataInformation(formattedDate); //passing fake order number here
-            //int newOrderNo = order.Max(o => o.OrderNumber);
+           List<Order> orders = GetDataInformation(formattedDate); 
+            int newOrderNo = orders.Max(o => o.OrderNumber) +1;
+            order.OrderNumber = newOrderNo;
             //int newOrderNo1 = newOrderNo +1;
-            
 
             using (var writer = File.AppendText(formattedDate))
             {

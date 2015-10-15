@@ -87,7 +87,7 @@ namespace FlooringMastery.BLL
 
             else
             {
-                _repo.WriteNewLine(newOrder, formattedDate);
+                //_repo.WriteNewLine(newOrder, formattedDate);
                 return formattedDate;
 
             }
@@ -97,7 +97,19 @@ namespace FlooringMastery.BLL
 
 
             }
-        }
+        public Response NewCustomerInformationResponse(Order order, string formattedDate)
+        { 
+            var response = new Response();
+
+            _repo.WriteNewLine(order, formattedDate);
+            response.OrderInfo = order;
+
+            return response;
+
+       }
+    }
+
+    
 
     }
    

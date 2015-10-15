@@ -18,6 +18,7 @@ namespace FlooringMastery.UI.Workflows
         {
             formattedDate = CreateDate();
             PopulateOrder(formattedDate);
+            
         }
 
 
@@ -36,53 +37,62 @@ namespace FlooringMastery.UI.Workflows
         {
             OrderOperations ops = new OrderOperations();
             var response = new Response();
+            Order order = new Order();
 
             Console.WriteLine("Account Information");
             Console.WriteLine("----------------------");
            
-            Console.WriteLine("Enter Last Name: ");
-            response.OrderInfo.LastName = Console.ReadLine();
-            Console.WriteLine("State: ");
-            response.OrderInfo.State = Console.ReadLine();
-            Console.WriteLine("TaxRate: ");
+            Console.Write("Enter Last Name: ");
+            order.LastName = Console.ReadLine();
+            Console.Write("State: ");
+            order.State = Console.ReadLine();
+            Console.Write("TaxRate: ");
             var input = Console.ReadLine();
-            response.OrderInfo.TaxRate = System.Convert.ToDecimal(input);     
+            order.TaxRate = System.Convert.ToDecimal(input);     
 
-            Console.WriteLine("ProductType: ");
-            response.OrderInfo.ProductType = Console.ReadLine();
+            Console.Write("ProductType: ");
+            order.ProductType = Console.ReadLine();
 
-            Console.WriteLine("Area: ");
+            Console.Write("Area: ");
             var input1 = Console.ReadLine();
-            response.OrderInfo.Area = System.Convert.ToDecimal(input);
+            order.Area = System.Convert.ToDecimal(input1);
 
-            Console.WriteLine("Cost Per Square Foot: ");
+            Console.Write("Cost Per Square Foot: ");
             var input2 = Console.ReadLine();
-            response.OrderInfo.CostSqFt = System.Convert.ToDecimal(input);
+            order.CostSqFt = System.Convert.ToDecimal(input2);
 
-            Console.WriteLine("Labor Per Square Foot: ");
+            Console.Write("Labor Per Square Foot: ");
             var input3 = Console.ReadLine();
-            response.OrderInfo.LaborSqFt = System.Convert.ToDecimal(input);
+            order.LaborSqFt = System.Convert.ToDecimal(input3);
 
-            Console.WriteLine("Material Cost: ");
+            Console.Write("Material Cost: ");
             var input4 = Console.ReadLine();
-            response.OrderInfo.MaterialCost = System.Convert.ToDecimal(input);
+            order.MaterialCost = System.Convert.ToDecimal(input4);
 
-            Console.WriteLine("Labor Cost: "); 
+            Console.Write("Labor Cost: "); 
             var input5 = Console.ReadLine();
-            response.OrderInfo.LaborCost = System.Convert.ToDecimal(input);
+            order.LaborCost = System.Convert.ToDecimal(input5);
 
-            Console.WriteLine("Tax: ");
+            Console.Write("Tax: ");
             var input6 = Console.ReadLine();
-            response.OrderInfo.Tax = System.Convert.ToDecimal(input);
+            order.Tax = System.Convert.ToDecimal(input6);
 
-            Console.WriteLine("Total: ");  
+            Console.Write("Total: ");  
             var input7 = Console.ReadLine();
-            response.OrderInfo.Total = System.Convert.ToDecimal(input);
+            order.Total = System.Convert.ToDecimal(input7);
             Console.WriteLine();
 
-            ops.CreateOrder(response.OrderInfo, formattedDate);
-            
+            ops.CreateOrder(order, formattedDate);
+
+           Console.Clear();
+           Console.WriteLine("Here is your new order information:  ");
+            DisplayOrderWorkflow dowf = new DisplayOrderWorkflow();
+            dowf.PrintOrderInformation(order);
+
+            Console.WriteLine("Press enter for Main Menu...");
         }
+
+
 
     }
 }

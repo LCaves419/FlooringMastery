@@ -47,10 +47,12 @@ namespace FlooringMastery.UI.Workflows
                 case "1":
                     DisplayOrderWorkflow dowf = new DisplayOrderWorkflow();
                     dowf.Execute();
+                    Console.ReadLine();
                     break;
                 case "2":
                     AddOrderWorkflow aowf = new AddOrderWorkflow();
                     aowf.Execute();
+                    Console.ReadLine();
                     break;
                 case "3":
                     Console.WriteLine("This feature is not implemented yet!");

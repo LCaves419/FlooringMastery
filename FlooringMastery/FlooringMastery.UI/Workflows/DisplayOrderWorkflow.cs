@@ -46,8 +46,6 @@ namespace FlooringMastery.UI.Workflows
                 Console.ReadLine();
 
             } while (true);
-
-          
         }
 
         public int GetOrderNumberFromUser()
@@ -76,8 +74,8 @@ namespace FlooringMastery.UI.Workflows
         {
             var ops = new OrderOperations();
             //string formattedDate = GetOrderDateFromUser();
-            int num = GetOrderNumberFromUser();
-            var response = ops.GetOrder(file, num);
+            //int num = GetOrderNumberFromUser();
+            var response = ops.GetOrder(file, orderNumber);
             _currentOrder = response.OrderInfo;
 
             if (response.Success)

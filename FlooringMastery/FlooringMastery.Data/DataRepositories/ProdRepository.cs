@@ -15,6 +15,11 @@ namespace FlooringMastery.Data.DataRepositories
         private string file;
 
         //converts datetime to string format
+        public List<Order> GetDataInformation(string file)
+        {
+            throw new NotImplementedException();
+        }
+
         public string GetOrderFile(DateTime OrderDate)
         {
             var newOrderDate = _filePath + "Orders_" + OrderDate.ToString("MMddyyyy") + ".txt";
@@ -62,6 +67,11 @@ namespace FlooringMastery.Data.DataRepositories
         {
             List<Order> orders = GetDataInformation(formattedOrderNumber, OrderNumber);
             return orders.FirstOrDefault(a => a.OrderNumber == OrderNumber);
+        }
+
+        public void WriteNewLine(Order order, string formattedDate)
+        {
+            throw new NotImplementedException();
         }
 
         //if date folder exists we need to add new order to it
