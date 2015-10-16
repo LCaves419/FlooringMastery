@@ -38,20 +38,66 @@ namespace FlooringMastery.UI.Workflows
             OrderOperations ops = new OrderOperations();
             var response = new Response();
             Order order = new Order();
+            bool isValid = false;
+            decimal stateRate = 0;
 
-            Console.WriteLine("Account Information");
+            Console.WriteLine("Enter Account Information");
             Console.WriteLine("----------------------");
            
-            Console.Write("Enter Last Name: ");
+            Console.Write("Last Name: ");
             order.LastName = Console.ReadLine();
-            Console.Write("State: ");
-            order.State = Console.ReadLine();
-            Console.Write("TaxRate: ");
-            var input = Console.ReadLine();
-            order.TaxRate = System.Convert.ToDecimal(input);     
 
-            Console.Write("ProductType: ");
-            order.ProductType = Console.ReadLine();
+            do
+            {
+                Console.Write("State: ");
+                order.State = Console.ReadLine();
+                string state = order.State;
+                if (state.Length < 2)
+                {
+                    Console.WriteLine("That was not a valid entry.\n Please enter a state...");
+                }
+                else
+                {
+                    isValid = true;
+                    stateRate = ops.MatchState(order.State);
+                }
+            } while (!isValid);
+
+            //setting tax rate based on state
+            order.TaxRate = stateRate;
+
+            Console.WriteLine("Your tax rate is {0}: ", order.TaxRate);
+
+
+            //-------------PRODUCT-----------------------
+
+            decimal costPerSquareFt = 0 ;
+            Product product = new Product();
+
+
+            do
+            {
+                //Console.WriteLine("");
+                Console.WriteLine("Plese enter a product type: Carpet, Laminate, Tile, Wood: ");
+                
+                string floorProduct = Console.ReadLine();
+
+               
+                if (floorProduct.Length > 8 || floorProduct.Length < 1)
+                {
+                    Console.WriteLine("That was not a valid entry.\n Please enter a product...");
+                }
+                else
+                {
+                    
+                     costPerSquareFt = ops.ReturnCostPerSquareFoot(floorProduct);
+                }
+            } while (costPerSquareFt == 0);// is 0
+
+            
+            Console.WriteLine("Your cost per square foot is {0}: ", costPerSquareFt);
+
+
 
             Console.Write("Area: ");
             var input1 = Console.ReadLine();

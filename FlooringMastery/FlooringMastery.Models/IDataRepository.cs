@@ -13,6 +13,8 @@ namespace FlooringMastery.Models
         Order GetOrderNumber(string formattedOrderNumber, int OrderNumber);
         void WriteNewLine(Order order, string formattedDate);
         string CreateFile(DateTime currentDate);
+        decimal GetStateTaxRate(string state);
+        decimal GetCostPerSqFt(string prodctType);
         bool DeleteOrder(string formattedDate, int orderNumber);
         void GetEditedOrder(string formattedDate, int orderNumber, Order order);
         Order SortNewEditedFile(string formattedDate, int orderNumber);

@@ -15,6 +15,8 @@ namespace FlooringMastery.Data.DataRepositories
     public class TestRepository : IDataRepository
     {
         private const string _filePath = @"DataFiles\TestFiles\";
+        private const string _stateFile = @"DataFiles\TestFiles\State.txt";
+        private const string _prodFile = @"DataFiles\TestFiles\Products.txt";
         private string file;
         //DataFiles\TestFiles\    .txt
         //converts datetime to string format
@@ -102,6 +104,53 @@ namespace FlooringMastery.Data.DataRepositories
                 //go from here to BLL 
             }
             return formattedDate;
+        }
+
+        public decimal GetStateTaxRate(string state)
+        {
+            List<State> states = new List<State>();
+            var reader = File.ReadAllLines(_stateFile);
+
+            //i = 1 starts on line 1 not 0.
+            for (int i = 1; i < reader.Length; i++)
+            {
+
+                var newState = new State();
+                var columns = reader[i].Split(',');
+                newState.StateAbbreviation = columns[0];
+                newState.StateName = columns[1];
+                newState.TaxRate = decimal.Parse(columns[2]);
+                states.Add(newState);
+            }
+            var result =
+                states.FirstOrDefault(
+                    s => string.Equals(s.StateAbbreviation, state, StringComparison.CurrentCultureIgnoreCase));
+            return result?.TaxRate ?? 0;
+
+            //var result = products.FirstOrDefault(p => string.Equals(p.ProductType, prodctType, StringComparison.CurrentCultureIgnoreCase));
+            //return result?.CostPerSquareFoot ?? 0;
+          
+        }
+
+        public decimal GetCostPerSqFt(string prodctType)
+        {
+           
+
+            List<Product> products = new List<Product>();
+            var reader = File.ReadAllLines(_prodFile);
+
+            //i = 1 starts on line 1 not 0.
+            for (int i = 1; i < reader.Length; i++)
+            {
+                var newProduct = new Product();
+                var columns = reader[i].Split(',');
+                newProduct.ProductType = columns[0];
+                newProduct.CostPerSquareFoot = decimal.Parse(columns[1]);
+                products.Add(newProduct);
+            }
+
+            var result = products.FirstOrDefault(p => string.Equals(p.ProductType, prodctType, StringComparison.CurrentCultureIgnoreCase));
+            return result?.CostPerSquareFoot ??0;
         }
 
         public bool DeleteOrder(string formattedDate, int orderNumber)

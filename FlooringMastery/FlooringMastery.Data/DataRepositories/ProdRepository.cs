@@ -104,6 +104,16 @@ namespace FlooringMastery.Data.DataRepositories
             return formattedDate;
         }
 
+        public decimal GetStateTaxRate(string state)
+        {
+            throw new NotImplementedException();
+        }
+
+        public decimal GetCostPerSqFt(string prodctType)
+        {
+            throw new NotImplementedException();
+        }
+
         public int DeleteOrder(string formattedDate, int orderNumber)
         {
             throw new NotImplementedException();
@@ -128,5 +138,10 @@ namespace FlooringMastery.Data.DataRepositories
         {
             throw new NotImplementedException();
         }
+
+        //string IDataRepository.GetStateTaxRate(string state)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }
