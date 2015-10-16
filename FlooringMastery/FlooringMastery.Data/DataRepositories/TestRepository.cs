@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Messaging;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -18,8 +20,8 @@ namespace FlooringMastery.Data.DataRepositories
         //converts datetime to string format
         public string GetOrderFile(DateTime OrderDate)
         {
-             var newOrderDate =  _filePath + "Orders_" + OrderDate.ToString("MMddyyyy") + ".txt";
-           
+            var newOrderDate = _filePath + "Orders_" + OrderDate.ToString("MMddyyyy") + ".txt";
+
             file = newOrderDate;
             return newOrderDate;
             //return _filePath.FirstOrDefault(a => a. == orderNumber);
@@ -28,7 +30,7 @@ namespace FlooringMastery.Data.DataRepositories
         //returns all orders of a specific date
         public List<Order> GetDataInformation(string file)
         {
-           List<Order> orders = new List<Order>();
+            List<Order> orders = new List<Order>();
 
             //read all orders that occur in orderFile, ie. on a specified date
             var reader = File.ReadAllLines(file);
@@ -59,7 +61,7 @@ namespace FlooringMastery.Data.DataRepositories
         }
 
         //finds correct order number from file
-        public Order GetOrderNumber( string formattedDate, int OrderNumber)
+        public Order GetOrderNumber(string formattedDate, int OrderNumber)
         {
             List<Order> orders = GetDataInformation(formattedDate);
             return orders.FirstOrDefault(a => a.OrderNumber == OrderNumber);
@@ -76,10 +78,10 @@ namespace FlooringMastery.Data.DataRepositories
             }
 
             order.OrderNumber = newOrderNo;
-          
+
             using (var writer = File.AppendText(formattedDate))
             {
-                writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}",order.OrderNumber, order.LastName,
+                writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", order.OrderNumber, order.LastName,
                     order.State, order.TaxRate, order.ProductType, order.Area, order.CostSqFt,
                     order.LaborSqFt, order.MaterialCost, order.LaborCost, order.Tax, order.Total);
                 //OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,
@@ -94,8 +96,9 @@ namespace FlooringMastery.Data.DataRepositories
             //var newDateFile = _filePath + "Orders_" + formattedDate.ToString("MMddyyyy") + ".txt";
             using (StreamWriter writer = new StreamWriter(formattedDate))
             {
-                writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}, {12}","OrderNumber","CustomerName","State","TaxRate","ProductType","Area","CostPerSquareFoot",
-                "LaborCostPerSquareFoot","MaterialCost","LaborCost","Tax","Total");
+                writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", "OrderNumber",
+                    "CustomerName", "State", "TaxRate", "ProductType", "Area", "CostPerSquareFoot",
+                    "LaborCostPerSquareFoot", "MaterialCost", "LaborCost", "Tax", "Total");
                 //go from here to BLL 
             }
             return formattedDate;
@@ -103,17 +106,17 @@ namespace FlooringMastery.Data.DataRepositories
 
         public bool DeleteOrder(string formattedDate, int orderNumber)
         {
-           
+
             List<Order> orders = GetDataInformation(formattedDate);
-            
-            string FileOnly = formattedDate.Substring(formattedDate.Length -19);
+
+            //string FileOnly = formattedDate.Substring(formattedDate.Length - 19);
             var result = from o in orders
                 where o.OrderNumber != orderNumber
                 select o;
             //if result.count > 0 
             if (orders.Count() > 1)
             {
-                File.WriteAllText(file,result.ToString());
+                File.WriteAllText(file, result.ToString());
                 return true;
             }
             else if (orders.Count() == 1)
@@ -127,18 +130,56 @@ namespace FlooringMastery.Data.DataRepositories
                     Console.WriteLine(e.Message);
                     return false;
                 }
-                
+
                 return true;
             }
             else
             {
                 return false;
             }
-           
-              
-            
-          
         }
+
+        public void GetEditedOrder(string formattedDate, int OrderNumber, Order changedOrder)
+        {
+            //public Order GetOrderNumber(string formattedDate, int OrderNumber)
+            
+            List<Order> orders = GetDataInformation(formattedDate); //brings back all orders from file
+
+            var result = from o in orders
+                         where o.OrderNumber != OrderNumber  // gets all orders EXCEPT the one we are changing
+                         select o;
+
+            File.WriteAllText(formattedDate, result.ToString());//rewrites to file all orders EXCEPT the original orderNumber
+
+            using (StreamWriter writer = new StreamWriter(formattedDate))
+            {
+                writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", "OrderNumber",
+                    "CustomerName", "State", "TaxRate", "ProductType", "Area", "CostPerSquareFoot",
+                    "LaborCostPerSquareFoot", "MaterialCost", "LaborCost", "Tax", "Total");
+                
+            }
+
+            using (var writer = File.AppendText(formattedDate)) // appends new order to end of file
+                {
+                    writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", changedOrder.OrderNumber,
+                        changedOrder.LastName,changedOrder.State, changedOrder.TaxRate, changedOrder.ProductType, changedOrder.Area,
+                        changedOrder.CostSqFt,
+                        changedOrder.LaborSqFt, changedOrder.MaterialCost, changedOrder.LaborCost, changedOrder.Tax,
+                        changedOrder.Total);
+                }
+        }
+
+        public Order SortNewEditedFile(string formattedDate, int orderNumber)
+        {
+            List<Order> orders = GetDataInformation(formattedDate); //brings back all orders from file
+            var  result = orders.OrderBy(o => o.OrderNumber);
+             Order revisedOrder = result.FirstOrDefault(a => a.OrderNumber == orderNumber);
+            return revisedOrder;
+        }
+
+            
     }
+
+
 }
 

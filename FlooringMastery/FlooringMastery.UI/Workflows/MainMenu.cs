@@ -55,8 +55,10 @@ namespace FlooringMastery.UI.Workflows
                     Console.ReadLine();
                     break;
                 case "3":
-                    Console.WriteLine("This feature is not implemented yet!");
-                    Console.WriteLine("Press enter to continue...");
+                    //Console.WriteLine("This feature is not implemented yet!");
+                    //Console.WriteLine("Press enter to continue...");
+                    EditOrderWorkflow eowf = new EditOrderWorkflow();
+                    eowf.Execute();
                     Console.ReadLine();
                     break;
                 case "4":

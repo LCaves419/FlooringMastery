@@ -109,6 +109,21 @@ namespace FlooringMastery.Data.DataRepositories
             throw new NotImplementedException();
         }
 
+        void IDataRepository.GetEditedOrder(string formattedDate, int orderNumber, Order order)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Order SortNewEditedFile(string formattedDate, int orderNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Order GetEditedOrder(string formattedDate, int orderNumber, Order order)
+        {
+            throw new NotImplementedException();
+        }
+
         bool IDataRepository.DeleteOrder(string formattedDate, int orderNumber)
         {
             throw new NotImplementedException();

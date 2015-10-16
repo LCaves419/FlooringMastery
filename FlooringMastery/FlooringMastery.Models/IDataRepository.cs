@@ -14,5 +14,7 @@ namespace FlooringMastery.Models
         void WriteNewLine(Order order, string formattedDate);
         string CreateFile(DateTime currentDate);
         bool DeleteOrder(string formattedDate, int orderNumber);
+        void GetEditedOrder(string formattedDate, int orderNumber, Order order);
+        Order SortNewEditedFile(string formattedDate, int orderNumber);
     }
 }

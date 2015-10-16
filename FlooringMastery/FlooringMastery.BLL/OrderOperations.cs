@@ -148,12 +148,22 @@ namespace FlooringMastery.BLL
 
             return response;
         }
-    
+
+        public Order EditOrder(string formattedDate, int orderNumber, Order changedOrder)
+        {
+            Response response = new Response();
+             _repo.GetEditedOrder(formattedDate, orderNumber, changedOrder);
+           Order revisedOrder = _repo.SortNewEditedFile(formattedDate, orderNumber);
+           // _repo.EditSameLine(formattedDate, orderNumber);
+
+            return revisedOrder;
+        }
+
     }
 
-    
 
-    }
+
+}
    
 
 
