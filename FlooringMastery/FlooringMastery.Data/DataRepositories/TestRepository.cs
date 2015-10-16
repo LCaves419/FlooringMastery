@@ -149,7 +149,7 @@ namespace FlooringMastery.Data.DataRepositories
                          where o.OrderNumber != OrderNumber  // gets all orders EXCEPT the one we are changing
                          select o;
 
-            File.WriteAllText(formattedDate, result.ToString());//rewrites to file all orders EXCEPT the original orderNumber
+            //File.WriteAllLines(formattedDate, result.ToString());//rewrites to file all orders EXCEPT the original orderNumber
 
             using (StreamWriter writer = new StreamWriter(formattedDate))
             {
@@ -159,6 +159,18 @@ namespace FlooringMastery.Data.DataRepositories
                 
             }
 
+            foreach (var o in result)
+            {
+                using (var writer = File.AppendText(formattedDate)) // appends new order to end of file
+                {
+                    writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", o.OrderNumber,
+                        o.LastName, o.State, o.TaxRate, o.ProductType,
+                        o.Area,
+                        o.CostSqFt,
+                        o.LaborSqFt, o.MaterialCost, o.LaborCost, o.Tax,
+                        o.Total);
+                }
+            }
             using (var writer = File.AppendText(formattedDate)) // appends new order to end of file
                 {
                     writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", changedOrder.OrderNumber,
@@ -172,12 +184,33 @@ namespace FlooringMastery.Data.DataRepositories
         public Order SortNewEditedFile(string formattedDate, int orderNumber)
         {
             List<Order> orders = GetDataInformation(formattedDate); //brings back all orders from file
-            var  result = orders.OrderBy(o => o.OrderNumber);
-             Order revisedOrder = result.FirstOrDefault(a => a.OrderNumber == orderNumber);
+            var result = orders.OrderBy(o => o.OrderNumber);
+
+            using (StreamWriter writer = new StreamWriter(formattedDate))
+            {
+                writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", "OrderNumber",
+                    "CustomerName", "State", "TaxRate", "ProductType", "Area", "CostPerSquareFoot",
+                    "LaborCostPerSquareFoot", "MaterialCost", "LaborCost", "Tax", "Total");
+
+            }
+
+            foreach (var o in result)
+            {
+                using (var writer = File.AppendText(formattedDate)) // appends new order to end of file  
+                {
+                    writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", o.OrderNumber,
+                        o.LastName, o.State, o.TaxRate, o.ProductType,
+                        o.Area,
+                        o.CostSqFt,
+                        o.LaborSqFt, o.MaterialCost, o.LaborCost, o.Tax,
+                        o.Total);
+
+                }
+            }
+
+            Order revisedOrder = result.FirstOrDefault(a => a.OrderNumber == orderNumber);
             return revisedOrder;
         }
-
-            
     }
 
 
