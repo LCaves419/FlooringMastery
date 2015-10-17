@@ -132,7 +132,7 @@ namespace FlooringMastery.Data.DataRepositories
           
         }
 
-        public decimal GetCostPerSqFt(string prodctType)
+        public decimal GetCostPerSqFt(string productType)
         {
            
 
@@ -149,9 +149,49 @@ namespace FlooringMastery.Data.DataRepositories
                 products.Add(newProduct);
             }
 
-            var result = products.FirstOrDefault(p => string.Equals(p.ProductType, prodctType, StringComparison.CurrentCultureIgnoreCase));
+            var result = products.FirstOrDefault(p => string.Equals(p.ProductType, productType, StringComparison.CurrentCultureIgnoreCase));
             return result?.CostPerSquareFoot ??0;
         }
+
+        public decimal GetLaborPerSquareFt(string productType)
+        {
+            List<Product> products = new List<Product>();
+            var reader = File.ReadAllLines(_prodFile);
+
+            //i = 1 starts on line 1 not 0.
+            for (int i = 1; i < reader.Length; i++)
+            {
+                var newProduct = new Product();
+                var columns = reader[i].Split(',');
+                newProduct.ProductType = columns[0];
+                newProduct.CostPerSquareFoot = decimal.Parse(columns[1]);
+                newProduct.LaborCostPerSquareFoot = decimal.Parse((columns[2]));
+                products.Add(newProduct);
+            }
+
+            var result = products.FirstOrDefault(p => string.Equals(p.ProductType, productType, StringComparison.CurrentCultureIgnoreCase));
+            return result?.LaborCostPerSquareFoot ?? 0;
+        }
+
+        //public decimal GetMaterialCost(string productType, decimal area)
+        //{
+        //    List<Product> products = new List<Product>();
+        //    var reader = File.ReadAllLines(_prodFile);
+
+        //    //i = 1 starts on line 1 not 0.
+        //    for (int i = 1; i < reader.Length; i++)
+        //    {
+        //        var newProduct = new Product();
+        //        var columns = reader[i].Split(',');
+        //        newProduct.ProductType = columns[0];
+        //        newProduct.CostPerSquareFoot = decimal.Parse(columns[1]);
+        //        newProduct.LaborCostPerSquareFoot = decimal.Parse((columns[2]));
+        //        products.Add(newProduct);
+        //    }
+
+        //    var result = products.FirstOrDefault(p => string.Equals(p.ProductType, productType, StringComparison.CurrentCultureIgnoreCase));
+        //    return result?.LaborCostPerSquareFoot ?? 0;
+        //}
 
         public bool DeleteOrder(string formattedDate, int orderNumber)
         {

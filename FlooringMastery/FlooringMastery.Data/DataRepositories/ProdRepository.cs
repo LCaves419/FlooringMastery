@@ -114,6 +114,11 @@ namespace FlooringMastery.Data.DataRepositories
             throw new NotImplementedException();
         }
 
+        public decimal GetLaborPerSquareFt(string productType)
+        {
+            throw new NotImplementedException();
+        }
+
         public int DeleteOrder(string formattedDate, int orderNumber)
         {
             throw new NotImplementedException();

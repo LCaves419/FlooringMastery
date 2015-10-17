@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -170,8 +171,7 @@ namespace FlooringMastery.BLL
 
         public decimal ReturnCostPerSquareFoot(string ProductType)
         {
-            Response response = new Response();
-           
+            
             decimal costPerSqFt = 0;
             string upperProduct = ProductType.ToUpper();
             bool isValid = false;
@@ -198,13 +198,47 @@ namespace FlooringMastery.BLL
                     return costPerSqFt = 0;
             }
             costPerSqFt = _repo.GetCostPerSqFt(upperProduct);
-            
+           
             return costPerSqFt;
         }
 
-    
+        public decimal LaborPerSquareFt(string upperProduct)
+        {
+           
+            decimal laborPerSquareFt = _repo.GetLaborPerSquareFt(upperProduct);
+            return laborPerSquareFt;
+        }
 
+        public decimal MaterialCost(string upperProduct, decimal area)
+        {
+            decimal costPerSquareFt = _repo.GetCostPerSqFt(upperProduct);
 
+            decimal materialCost = (costPerSquareFt*area);
+            return materialCost;
+        }
+
+        public decimal LaborCost(string upperProduct, decimal area)
+        {
+            decimal laborCostPerSquareFt = _repo.GetLaborPerSquareFt(upperProduct);
+            decimal laborCost = area*laborCostPerSquareFt;
+
+            return laborCost;
+        }
+
+        public decimal Tax(string state, decimal materialCost)
+        {
+            decimal taxRate = _repo.GetStateTaxRate(state);
+            decimal newTaxRate = taxRate/100;
+            decimal tax = materialCost*newTaxRate;
+
+            return tax;
+        }
+
+        public decimal Total(decimal materialCost, decimal tax, decimal laborCost)
+        {
+            decimal total = (materialCost*tax) + laborCost;
+            return total;
+        }
     /// <summary>
     /// 
     /// </summary>

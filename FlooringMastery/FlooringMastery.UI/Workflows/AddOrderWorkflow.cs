@@ -21,7 +21,6 @@ namespace FlooringMastery.UI.Workflows
             
         }
 
-
         public string CreateDate()
         {
            
@@ -51,8 +50,8 @@ namespace FlooringMastery.UI.Workflows
             {
                 Console.Write("State: ");
                 order.State = Console.ReadLine();
-                string state = order.State;
-                if (state.Length < 2)
+                //string state = order.State;
+                if (order.State.Length < 2)
                 {
                     Console.WriteLine("That was not a valid entry.\n Please enter a state...");
                 }
@@ -71,61 +70,68 @@ namespace FlooringMastery.UI.Workflows
 
             //-------------PRODUCT-----------------------
 
-            decimal costPerSquareFt = 0 ;
             Product product = new Product();
-
-
             do
             {
                 //Console.WriteLine("");
                 Console.WriteLine("Plese enter a product type: Carpet, Laminate, Tile, Wood: ");
                 
-                string floorProduct = Console.ReadLine();
+                order.ProductType = Console.ReadLine();
 
                
-                if (floorProduct.Length > 8 || floorProduct.Length < 1)
+                if (order.ProductType.Length > 8 || order.ProductType.Length < 1)
                 {
                     Console.WriteLine("That was not a valid entry.\n Please enter a product...");
                 }
                 else
                 {
                     
-                     costPerSquareFt = ops.ReturnCostPerSquareFoot(floorProduct);
+                     order.CostSqFt = ops.ReturnCostPerSquareFoot(order.ProductType);
+                    
                 }
-            } while (costPerSquareFt == 0);// is 0
+            } while (order.CostSqFt == 0);// is 0
 
-            
-            Console.WriteLine("Your cost per square foot is {0}: ", costPerSquareFt);
+            Console.WriteLine("Your cost per square foot is {0:c}: ", order.CostSqFt);
 
+            // getting labor per square foot
+            order.LaborSqFt = ops.LaborPerSquareFt(order.ProductType);
 
+            Console.WriteLine("Your labor per square foot is {0:c}: ", order.LaborSqFt);
 
+            // getting area 
             Console.Write("Area: ");
-            var input1 = Console.ReadLine();
-            order.Area = System.Convert.ToDecimal(input1);
+            order.Area = decimal.Parse(Console.ReadLine());
+            do
+            {
+                
+                if (order.Area <= 0)
+                {
+                    Console.WriteLine("You need to get a bigger house!");
+                    //error log
+                }
+            } while (order.Area <= 0);
 
-            Console.Write("Cost Per Square Foot: ");
-            var input2 = Console.ReadLine();
-            order.CostSqFt = System.Convert.ToDecimal(input2);
+           
 
-            Console.Write("Labor Per Square Foot: ");
-            var input3 = Console.ReadLine();
-            order.LaborSqFt = System.Convert.ToDecimal(input3);
+            // getting material cost
+            order.MaterialCost = ops.MaterialCost(order.ProductType, order.Area);
 
-            Console.Write("Material Cost: ");
-            var input4 = Console.ReadLine();
-            order.MaterialCost = System.Convert.ToDecimal(input4);
+            Console.Write("Material Cost: {0:c} ", order.MaterialCost);
+          
+            //getting labor cost
 
-            Console.Write("Labor Cost: "); 
-            var input5 = Console.ReadLine();
-            order.LaborCost = System.Convert.ToDecimal(input5);
+            order.LaborCost = ops.LaborCost(order.ProductType, order.Area);
+            Console.Write("\nLabor Cost: {0:c} ", order.LaborCost); 
+           
+            //get tax
+            
+            order.Tax = ops.Tax(order.State, order.MaterialCost);
+            Console.Write("\nTax: {0:c} ", order.Tax);
 
-            Console.Write("Tax: ");
-            var input6 = Console.ReadLine();
-            order.Tax = System.Convert.ToDecimal(input6);
+            //get total
+            Console.Write("\nTotal: {0:c}", order.Total);  
+            order.Total =  ops.Total(order.MaterialCost, order.Tax, order.LaborCost);
 
-            Console.Write("Total: ");  
-            var input7 = Console.ReadLine();
-            order.Total = System.Convert.ToDecimal(input7);
             Console.WriteLine();
 
             ops.CreateOrder(order, formattedDate);
