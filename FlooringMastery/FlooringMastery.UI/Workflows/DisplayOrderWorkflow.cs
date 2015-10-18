@@ -47,7 +47,7 @@ namespace FlooringMastery.UI.Workflows
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("\n  PLEASE CH0OSE AN ORDER NUMBER....");
                 string input = Console.ReadLine();
-
+                
                 int OrderNumber;
 
                 if (int.TryParse(input, out OrderNumber))
@@ -73,8 +73,6 @@ namespace FlooringMastery.UI.Workflows
         /// <returns></returns>
         public string GetOrderDateFromUser()
         {
-        
-
             do
                 {
                     Console.Clear();
@@ -89,7 +87,6 @@ namespace FlooringMastery.UI.Workflows
                         Console.WriteLine("\tPress enter to continue...");
                         log.ErrorMessage = "That was not a valid entry UI:getOrderDateFromUser....";
                         ops.CallingErrorLogRepository(log.ErrorMessage);
-                        //TODO: enter error to error log
                         Console.ReadLine();
                     }
                     else
@@ -97,16 +94,17 @@ namespace FlooringMastery.UI.Workflows
                         DateTime OrderDate;
                         if (DateTime.TryParse(input, out OrderDate))
                         {
-                           
                             var formattedOrderDate = ops.GetOrderDate(OrderDate);
                             if (formattedOrderDate == null)
                             {
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("\tThat was not a valid date....");
                                 Console.WriteLine("\tPress enter to continue...");
+                                
                             log.ErrorMessage = "That was not a valid date UI:getOrderDateFromUser....";
                             ops.CallingErrorLogRepository(log.ErrorMessage);
                             Console.ReadLine();
+                                continue;
                             }
                             return formattedOrderDate;
                         }
@@ -150,6 +148,7 @@ namespace FlooringMastery.UI.Workflows
             var ops = new OrderOperations();
             //string formattedDate = GetOrderDateFromUser();
             //int num = GetOrderNumberFromUser();
+           
             var response = ops.GetOrder(file, orderNumber);
             //_currentOrder = response.OrderInfo;
                 if (response.Success)

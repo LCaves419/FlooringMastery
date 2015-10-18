@@ -13,19 +13,19 @@ namespace FlooringMastery.UI.Workflows
         OrderOperations ops = new OrderOperations();
         ErrorLog log = new ErrorLog();
 
-       //private Order _currentOrder;
+        //private Order _currentOrder;
         private string formattedDate;
 
         public void Execute()
         {
             formattedDate = CreateDate();
             PopulateOrder(formattedDate);
-            
+
         }
 
         public string CreateDate()
         {
-           
+
             DateTime currentDate = DateTime.Now;
             OrderOperations ops = new OrderOperations();
 
@@ -48,11 +48,21 @@ namespace FlooringMastery.UI.Workflows
             Console.ForegroundColor = ConsoleColor.White;
 
 
-            bool checkedInput = false;
+            bool checkedInput = true;
             do
             {
                 Console.Write("\tLast Name: ");
                 order.LastName = Console.ReadLine();
+                if (order.LastName.Length <= 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\tThat was not a valid entry.\n\t Please enter a name...");
+                    log.ErrorMessage = "That was not a valid name(name) UI:PopulateOrder/AddWorkflow....";
+                    ops.CallingErrorLogRepository(log.ErrorMessage);
+                    checkedInput = false;
+                    continue;
+                }
+
 
                 checkedInput = ops.ValidateInput(order.LastName.ToCharArray());
 
@@ -70,8 +80,8 @@ namespace FlooringMastery.UI.Workflows
                 }
 
             } while (checkedInput == false);
-            
-             
+
+
             do
             {
                 Console.ForegroundColor = ConsoleColor.White;
@@ -112,10 +122,10 @@ namespace FlooringMastery.UI.Workflows
 
                 //Console.WriteLine("");
                 Console.Write("\tPlease enter a product type:\n\t\t Carpet, Laminate, Tile, Wood: ");
-                
+
                 order.ProductType = Console.ReadLine();
 
-               
+
                 if (order.ProductType.Length > 8 || order.ProductType.Length < 1)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
@@ -125,9 +135,9 @@ namespace FlooringMastery.UI.Workflows
                 }
                 else
                 {
-                    
-                     order.CostSqFt = ops.ReturnCostPerSquareFoot(order.ProductType);
-                    
+
+                    order.CostSqFt = ops.ReturnCostPerSquareFoot(order.ProductType);
+
                 }
             } while (order.CostSqFt == 0);// is 0
 
@@ -142,23 +152,34 @@ namespace FlooringMastery.UI.Workflows
             Console.WriteLine("\tYour labor per square foot is {0:c}: ", order.LaborSqFt);
 
             // getting area 
-            Console.ForegroundColor = ConsoleColor.White;
-
-            Console.Write("\tArea: ");
-            order.Area = decimal.Parse(Console.ReadLine());
             do
             {
+                Console.ForegroundColor = ConsoleColor.White;
+
+                Console.Write("\tArea: ");
+                string input = Console.ReadLine();
+                if (input.Length == 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\tThat was not a valid entry.\n\t Please enter a Area...");
+                    log.ErrorMessage = "That was not a valid Area(Area) UI:PopulateOrder/AddWorkflow....";
+                    ops.CallingErrorLogRepository(log.ErrorMessage);
+                    order.Area = 0;
+                    continue;
+                }
+
+                order.Area = decimal.Parse(input);
+
                 if (order.Area <= 0)
                 {
                     Console.WriteLine("\tYou need to get a bigger house!");
                     log.ErrorMessage = "That was not a valid area (area) UI:PopulateOrder....";
                     ops.CallingErrorLogRepository(log.ErrorMessage);
-
-                    //error log
+                    
                 }
             } while (order.Area <= 0);
 
-           
+
 
             // getting material cost
             order.MaterialCost = ops.MaterialCost(order.ProductType, order.Area);
@@ -170,8 +191,8 @@ namespace FlooringMastery.UI.Workflows
             Console.ForegroundColor = ConsoleColor.White;
 
             order.LaborCost = ops.LaborCost(order.ProductType, order.Area);
-            Console.Write("\nLabor Cost: {0:c} ", order.LaborCost); 
-           
+            Console.Write("\nLabor Cost: {0:c} ", order.LaborCost);
+
             //get tax
             Console.ForegroundColor = ConsoleColor.White;
 
@@ -181,14 +202,14 @@ namespace FlooringMastery.UI.Workflows
             //get total
             Console.ForegroundColor = ConsoleColor.White;
 
-            Console.Write("\nTotal: {0:c}", order.Total);  
-            order.Total =  ops.Total(order.MaterialCost, order.Tax, order.LaborCost);
+            Console.Write("\nTotal: {0:c}", order.Total);
+            order.Total = ops.Total(order.MaterialCost, order.Tax, order.LaborCost);
 
             Console.WriteLine();
 
             ops.CreateOrder(order, formattedDate);
 
-           Console.Clear();
+            Console.Clear();
             Console.ForegroundColor = ConsoleColor.Yellow;
 
             Console.WriteLine("\n\tHere is your new order information:  \n");
