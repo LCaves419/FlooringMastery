@@ -10,26 +10,24 @@ namespace FlooringMastery.Data.DataRepositories
 {
     public class ProdRepository : IDataRepository
     {
-        private const string _filePath = @"DataFiles\ProdFile\";
-
+        private const string _filePath = @"DataFiles\TestFiles\";
+        private const string _stateFile = @"DataFiles\TestFiles\State.txt";
+        private const string _prodFile = @"DataFiles\TestFiles\Products.txt";
         private string file;
-
+        //DataFiles\TestFiles\    .txt
         //converts datetime to string format
-        public List<Order> GetDataInformation(string file)
-        {
-            throw new NotImplementedException();
-        }
 
         public string GetOrderFile(DateTime OrderDate)
         {
             var newOrderDate = _filePath + "Orders_" + OrderDate.ToString("MMddyyyy") + ".txt";
+
             file = newOrderDate;
             return newOrderDate;
-            //return _filePath.FirstOrDefault(a => a. == orderNumber);
+            // _filePath.FirstOrDefault(a => a. == file);
         }
 
         //returns all orders of a specific date
-        public List<Order> GetDataInformation(string file, int OrderNumber)
+        public List<Order> GetDataInformation(string file)
         {
             List<Order> orders = new List<Order>();
 
@@ -57,33 +55,30 @@ namespace FlooringMastery.Data.DataRepositories
                 order.Total = decimal.Parse(columns[11]);
 
                 orders.Add(order);
-
             }
             return orders;
         }
 
         //finds correct order number from file
-        public Order GetOrderNumber(string formattedOrderNumber, int OrderNumber)
+        public Order GetOrderNumber(string formattedDate, int OrderNumber)
         {
-            List<Order> orders = GetDataInformation(formattedOrderNumber, OrderNumber);
+            List<Order> orders = GetDataInformation(formattedDate);
             return orders.FirstOrDefault(a => a.OrderNumber == OrderNumber);
         }
 
+        //if date folder exists we need to add new order to it
         public void WriteNewLine(Order order, string formattedDate)
         {
-            throw new NotImplementedException();
-        }
-
-        //if date folder exists we need to add new order to it
-        public void WriteNewLine(Order order, string formattedDate, int OrderNumber)
-        {
-            var orders = GetDataInformation(formattedDate, OrderNumber);
-            int newOrderNo = orders.Max(o => o.OrderNumber);
-            int newOrderNo1 = newOrderNo + 1;
-
+            List<Order> orders = GetDataInformation(formattedDate);
+            int newOrderNo = 1;
+            if (orders.Count > 1)
+            {
+                newOrderNo = orders.Max(o => o.OrderNumber) + 1;
+            }
+            order.OrderNumber = newOrderNo;
             using (var writer = File.AppendText(formattedDate))
             {
-                writer.Write("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", newOrderNo1, order.LastName,
+                writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", order.OrderNumber, order.LastName,
                     order.State, order.TaxRate, order.ProductType, order.Area, order.CostSqFt,
                     order.LaborSqFt, order.MaterialCost, order.LaborCost, order.Tax, order.Total);
                 //OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,
@@ -98,55 +93,191 @@ namespace FlooringMastery.Data.DataRepositories
             //var newDateFile = _filePath + "Orders_" + formattedDate.ToString("MMddyyyy") + ".txt";
             using (StreamWriter writer = new StreamWriter(formattedDate))
             {
-                writer.Write("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", "OrderNumber", "CustomerName", "State", "TaxRate", "ProductType", "Area", "CostPerSquareFoot",
-                "LaborCostPerSquareFoot", "MaterialCost", "LaborCost", "Tax", "Total");
+                WriteHeader(writer);
+                //go from here to BLL 
             }
             return formattedDate;
         }
 
-        public decimal GetStateTaxRate(string state)
+        private static void WriteHeader(StreamWriter writer)
         {
-            throw new NotImplementedException();
+            writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", "OrderNumber",
+                "CustomerName", "State", "TaxRate", "ProductType", "Area", "CostPerSquareFoot",
+                "LaborCostPerSquareFoot", "MaterialCost", "LaborCost", "Tax", "Total");
         }
 
-        public decimal GetCostPerSqFt(string prodctType)
+        public decimal GetStateTaxRate(string state)
         {
-            throw new NotImplementedException();
+            List<State> states = new List<State>();
+            var reader = File.ReadAllLines(_stateFile);
+
+            //i = 1 starts on line 1 not 0.
+            for (int i = 1; i < reader.Length; i++)
+            {
+                var newState = new State();
+                var columns = reader[i].Split(',');
+                newState.StateAbbreviation = columns[0];
+                newState.StateName = columns[1];
+                newState.TaxRate = decimal.Parse(columns[2]);
+                states.Add(newState);
+            }
+            var result =
+                states.FirstOrDefault(
+                    s => string.Equals(s.StateAbbreviation, state, StringComparison.CurrentCultureIgnoreCase));
+            return result?.TaxRate ?? 0;
+        }
+
+        public decimal GetCostPerSqFt(string productType)
+        {
+            List<Product> products = new List<Product>();
+            var reader = File.ReadAllLines(_prodFile);
+
+            //i = 1 starts on line 1 not 0.
+            for (int i = 1; i < reader.Length; i++)
+            {
+                var newProduct = new Product();
+                var columns = reader[i].Split(',');
+                newProduct.ProductType = columns[0];
+                newProduct.CostPerSquareFoot = decimal.Parse(columns[1]);
+                products.Add(newProduct);
+            }
+
+            var result =
+                products.FirstOrDefault(
+                    p => string.Equals(p.ProductType, productType, StringComparison.CurrentCultureIgnoreCase));
+            return result?.CostPerSquareFoot ?? 0;
         }
 
         public decimal GetLaborPerSquareFt(string productType)
         {
-            throw new NotImplementedException();
+            List<Product> products = new List<Product>();
+            var reader = File.ReadAllLines(_prodFile);
+
+            //i = 1 starts on line 1 not 0.
+            for (int i = 1; i < reader.Length; i++)
+            {
+                var newProduct = new Product();
+                var columns = reader[i].Split(',');
+                newProduct.ProductType = columns[0];
+                newProduct.CostPerSquareFoot = decimal.Parse(columns[1]);
+                newProduct.LaborCostPerSquareFoot = decimal.Parse((columns[2]));
+                products.Add(newProduct);
+            }
+
+            var result =
+                products.FirstOrDefault(
+                    p => string.Equals(p.ProductType, productType, StringComparison.CurrentCultureIgnoreCase));
+            return result?.LaborCostPerSquareFoot ?? 0;
         }
 
-        public int DeleteOrder(string formattedDate, int orderNumber)
+        public bool DeleteOrder(string formattedDate, int orderNumber)
         {
-            throw new NotImplementedException();
+            List<Order> orders = GetDataInformation(formattedDate);
+            //string FileOnly = formattedDate.Substring(formattedDate.Length - 19);
+            var ordersToKeep = from o in orders
+                where o.OrderNumber != orderNumber
+                select o;
+            //if result.count > 0 
+            if (ordersToKeep.Count() > 1)
+            {
+                RewriteFile(formattedDate, ordersToKeep);
+                return true;
+            }
+            else if (ordersToKeep.Count() == 0)
+            {
+                System.IO.File.Delete(formattedDate);
+                return true;
+            }
+            return false;
+            //    try
+            //    {
+            //        System.IO.File.Delete(formattedDate);
+            //    }
+            //    catch (System.IO.IOException e)
+            //    {
+            //        Console.WriteLine(e.Message);
+            //        return false;
+            //    }
+
+            //    return true;
+            //}
+            //else
+            //{
+            //    return false;
+            //}
         }
 
-        void IDataRepository.GetEditedOrder(string formattedDate, int orderNumber, Order order)
+        public void GetEditedOrder(string formattedDate, int OrderNumber, Order changedOrder)
         {
-            throw new NotImplementedException();
+            //public Order GetOrderNumber(string formattedDate, int OrderNumber)
+
+            List<Order> orders = GetDataInformation(formattedDate); //brings back all orders from file
+
+            var otherOrders = from o in orders
+                where o.OrderNumber != OrderNumber
+                // gets all orders EXCEPT the one we are changing
+                select o;
+
+            //File.WriteAllLines(formattedDate, result.ToString());//rewrites to file all orders EXCEPT the original orderNumber
+
+            RewriteFile(formattedDate, otherOrders);
+            using (var writer = File.AppendText(formattedDate)) // appends new order to end of file
+            {
+                writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", changedOrder.OrderNumber,
+                    changedOrder.LastName, changedOrder.State, changedOrder.TaxRate, changedOrder.ProductType,
+                    changedOrder.Area,
+                    changedOrder.CostSqFt,
+                    changedOrder.LaborSqFt, changedOrder.MaterialCost, changedOrder.LaborCost, changedOrder.Tax,
+                    changedOrder.Total);
+            }
+        }
+
+        private static void RewriteFile(string formattedDate, IEnumerable<Order> result)
+        {
+            using (StreamWriter writer = new StreamWriter(formattedDate))
+            {
+                WriteHeader(writer);
+            }
+
+            foreach (var o in result)
+            {
+                using (var writer = File.AppendText(formattedDate))
+                {
+                    WriteOrder(writer, o);
+                }
+            }
+        }
+
+        private static void WriteOrder(StreamWriter writer, Order o)
+        {
+            writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", o.OrderNumber,
+                o.LastName, o.State, o.TaxRate, o.ProductType,
+                o.Area,
+                o.CostSqFt,
+                o.LaborSqFt, o.MaterialCost, o.LaborCost, o.Tax,
+                o.Total);
         }
 
         public Order SortNewEditedFile(string formattedDate, int orderNumber)
         {
-            throw new NotImplementedException();
-        }
+            List<Order> orders = GetDataInformation(formattedDate); //brings back all orders from file
+            var sortedOrders = orders.OrderBy(o => o.OrderNumber);
 
-        public Order GetEditedOrder(string formattedDate, int orderNumber, Order order)
-        {
-            throw new NotImplementedException();
-        }
+            using (StreamWriter writer = new StreamWriter(formattedDate))
+            {
+                WriteHeader(writer);
+            }
 
-        bool IDataRepository.DeleteOrder(string formattedDate, int orderNumber)
-        {
-            throw new NotImplementedException();
-        }
+            foreach (var order in sortedOrders)
+            {
+                using (var writer = File.AppendText(formattedDate)) // appends new order to end of file  
+                {
+                    WriteOrder(writer, order);
+                }
+            }
+            Order revisedOrder = sortedOrders.FirstOrDefault(a => a.OrderNumber == orderNumber);
 
-        //string IDataRepository.GetStateTaxRate(string state)
-        //{
-        //    throw new NotImplementedException();
-        //}
+            return revisedOrder;
+        }
     }
 }

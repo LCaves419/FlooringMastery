@@ -316,8 +316,6 @@ namespace FlooringMastery.BLL
             {
                 response.Success = true;
                 response.Message = "The order you were trying to delete has been successfully deleted.";
-               
-
             }
             else
             {
@@ -329,7 +327,6 @@ namespace FlooringMastery.BLL
                 log.ErrorMessage = "Not able to delete order  BLL:OrderToDel....";
                 CallingErrorLogRepository(log.ErrorMessage);
             }
-
             return response;
         }
 
@@ -371,7 +368,8 @@ namespace FlooringMastery.BLL
                 if (input.Contains(badInput[i]))
                 {
                     return false;
-                } 
+                }
+                return true;
             }
 
             return true;

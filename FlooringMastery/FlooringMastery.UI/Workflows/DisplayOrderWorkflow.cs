@@ -39,8 +39,8 @@ namespace FlooringMastery.UI.Workflows
                 Console.WriteLine("\tOrder Number: {0}", a.OrderNumber);
                 Console.WriteLine("\t************************");
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("\tName: {0}", a.LastName);
-                Console.WriteLine("\tState: {0}", a.State);
+                Console.WriteLine("\tName: {0}", a.LastName.ToUpper());
+                Console.WriteLine("\tState: {0}", a.State.ToUpper());
             }
             do
             {
