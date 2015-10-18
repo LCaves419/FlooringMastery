@@ -47,20 +47,13 @@ namespace FlooringMastery.BLL
                 response.Message = "This is not the order date you are looking for...";
                 return null;
             }
-
-            
-
-            //if (File.Exists(newFileName))
-            //{
-
-            //    return newFileName;
-
-
-            //}
-            //Console.WriteLine("That date does not match a a date in our files");
-            //write this error to the error log
-            //return "That date does not match a a date in our files";
         }
+
+        public List<Order> GetAllOrders(string formattedDate)
+        {
+            List<Order> allOrders = _repo.GetDataInformation(formattedDate);
+            return allOrders;
+        } 
 
 
         /// <summary>

@@ -19,14 +19,52 @@ namespace FlooringMastery.UI.Workflows
         {
            // Order newOrder = new Order();
             file = GetOrderDateFromUser();
-            OrderNumber = GetOrderNumberFromUser();
+            OrderNumber = DisplayAllAccounts(file);
             DisplayOrderInformation(file, OrderNumber);
         }
 
-/// <summary>
-/// validates that they entered an actual date
-/// </summary>
-/// <returns></returns>
+        public int DisplayAllAccounts(string file)
+        {
+            Console.Clear();
+            var ops = new OrderOperations();
+            //get all orders from the entered file
+            List<Order> allOrdersToDisplay = ops.GetAllOrders(file);
+            Console.WriteLine("\t");
+            foreach (var a in allOrdersToDisplay)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("\t************************");
+                Console.WriteLine("\tOrder Number: {0}", a.OrderNumber);
+                Console.WriteLine("\t************************");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("\tName: {0}", a.LastName);
+                Console.WriteLine("\tState: {0}", a.State);
+            }
+            do
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("\nPLEASE CH0OSE AN ORDER NUMBER....");
+                string input = Console.ReadLine();
+
+                int OrderNumber;
+
+                if (int.TryParse(input, out OrderNumber))
+                {
+                    return OrderNumber;
+                }
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("That was not a valid entry....");
+                Console.WriteLine("Press enter to continue....");
+                Console.ReadLine();
+
+
+            } while (true);
+        }
+
+        /// <summary>
+        /// validates that they entered an actual date
+        /// </summary>
+        /// <returns></returns>
         public string GetOrderDateFromUser()
         {
             do
@@ -127,6 +165,7 @@ namespace FlooringMastery.UI.Workflows
             Console.WriteLine("\t  Labor Cost: {0}", orderInfo.LaborCost);
             Console.WriteLine("\t  Tax: {0}", orderInfo.Tax);
             Console.WriteLine("\t  Total: {0:c}", orderInfo.Total);
+            Console.WriteLine("Press enter for Main Menu");
             Console.WriteLine();
         }
 
