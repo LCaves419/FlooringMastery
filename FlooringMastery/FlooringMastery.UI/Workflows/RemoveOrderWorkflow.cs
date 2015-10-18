@@ -11,6 +11,8 @@ namespace FlooringMastery.UI.Workflows
 {
     public class RemoveOrderWorkflow
     {
+        OrderOperations ops = new OrderOperations();
+        ErrorLog log = new ErrorLog();
         private string formattedDate;
         private int orderNumber;
         private Order _currentOrder;
@@ -27,7 +29,13 @@ namespace FlooringMastery.UI.Workflows
 
         public void ConfirmDeletion()
         {
-            Console.WriteLine("Are you sure you want to Delete this order?  (Y)es or (N)o");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Beep();
+            Console.Beep();
+            Console.Beep();
+
+            Console.WriteLine("\tARE YOU SURE YOU WANT TO DELETE THIS ORDER?  (Y)es or (N)o");
+           
             string input = Console.ReadLine().ToUpper();
 
             if (input == "Y")

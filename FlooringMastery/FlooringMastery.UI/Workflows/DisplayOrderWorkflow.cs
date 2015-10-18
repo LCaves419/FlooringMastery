@@ -11,6 +11,8 @@ namespace FlooringMastery.UI.Workflows
 {
     public class DisplayOrderWorkflow
     {
+        ErrorLog log = new ErrorLog();
+        OrderOperations ops = new OrderOperations();
         private Order _currentOrder;
         private string file;
         private int OrderNumber;
@@ -43,7 +45,7 @@ namespace FlooringMastery.UI.Workflows
             do
             {
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("\t\nPLEASE CH0OSE AN ORDER NUMBER....");
+                Console.WriteLine("\n  PLEASE CH0OSE AN ORDER NUMBER....");
                 string input = Console.ReadLine();
 
                 int OrderNumber;
@@ -55,6 +57,8 @@ namespace FlooringMastery.UI.Workflows
                 }
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("\tThat was not a valid entry....");
+                log.ErrorMessage = "That was not a valid order number entry UI:DisplayALlAccounts....";
+                ops.CallingErrorLogRepository(log.ErrorMessage);
                 Console.WriteLine("\tPress enter to continue....");
                 Console.ReadLine();
 
@@ -69,7 +73,7 @@ namespace FlooringMastery.UI.Workflows
         /// <returns></returns>
         public string GetOrderDateFromUser()
         {
-            OrderOperations ops = new OrderOperations();
+        
 
             do
                 {
@@ -81,10 +85,9 @@ namespace FlooringMastery.UI.Workflows
                     if (input.Length < 10)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("That was not a valid entry....");
-                        Console.WriteLine("Press enter to continue...");
-                    ErrorLog log = new ErrorLog();
-                        log.ErrorMessage = "That was not a valid entry getOrderDateFromUser....";
+                        Console.WriteLine("\tThat was not a valid entry....");
+                        Console.WriteLine("\tPress enter to continue...");
+                        log.ErrorMessage = "That was not a valid entry UI:getOrderDateFromUser....";
                         ops.CallingErrorLogRepository(log.ErrorMessage);
                         //TODO: enter error to error log
                         Console.ReadLine();
@@ -99,10 +102,11 @@ namespace FlooringMastery.UI.Workflows
                             if (formattedOrderDate == null)
                             {
                                 Console.ForegroundColor = ConsoleColor.Red;
-                                Console.WriteLine("That was not a valid entry....");
-                                Console.WriteLine("Press enter to continue...");
-                                //TODO: enter error to error log
-                                Console.ReadLine();
+                                Console.WriteLine("\tThat was not a valid date....");
+                                Console.WriteLine("\tPress enter to continue...");
+                            log.ErrorMessage = "That was not a valid date UI:getOrderDateFromUser....";
+                            ops.CallingErrorLogRepository(log.ErrorMessage);
+                            Console.ReadLine();
                             }
                             return formattedOrderDate;
                         }
@@ -130,8 +134,10 @@ namespace FlooringMastery.UI.Workflows
                     return OrderNumber;
                 }
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("That was not a valid entry....");
-                Console.WriteLine("Press enter to continue....");
+                Console.WriteLine("\tThat was not a valid entry....");
+                Console.WriteLine("\tPress enter to continue....");
+                log.ErrorMessage = "That was not a valid order number UI:getOrderNumFromUser....";
+                ops.CallingErrorLogRepository(log.ErrorMessage);
                 Console.ReadLine();
                 DisplayOrderInformation(file, OrderNumber);
 
@@ -155,10 +161,12 @@ namespace FlooringMastery.UI.Workflows
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Error occurred!!");
+                    Console.WriteLine("\tError occurred!!");
                     Console.WriteLine(response.Message);
-                    Console.WriteLine("Press enter to continue...");
-                    Console.ReadLine();
+                    Console.WriteLine("\tPress enter to continue...");
+                log.ErrorMessage = "That was not a valid order UI:DisplayOrdererInfo....";
+                ops.CallingErrorLogRepository(log.ErrorMessage);
+                Console.ReadLine();
                     GetOrderDateFromUser();
                     return null;
                 }
@@ -172,18 +180,19 @@ namespace FlooringMastery.UI.Workflows
             Console.WriteLine("\t**********************");
             Console.ForegroundColor = ConsoleColor.White;
 
-            Console.WriteLine("\t  Name: {0}", orderInfo.LastName);
-            Console.WriteLine("\t  State: {0}", orderInfo.State);
+            Console.WriteLine("\t  Name: {0}", orderInfo.LastName.ToUpper());
+            Console.WriteLine("\t  State: {0}", orderInfo.State.ToUpper());
             Console.WriteLine("\t  TaxRate: {0}", orderInfo.TaxRate);
-            Console.WriteLine("\t  ProductType: {0}", orderInfo.ProductType);
+            Console.WriteLine("\t  ProductType: {0}", orderInfo.ProductType.ToUpper());
             Console.WriteLine("\t  Area: {0}", orderInfo.Area);
-            Console.WriteLine("\t  Cost Per Square Foot: {0}", orderInfo.CostSqFt);
-            Console.WriteLine("\t  Labor Per Square Foot: {0}", orderInfo.LaborSqFt);
-            Console.WriteLine("\t  Material Cost: {0}", orderInfo.MaterialCost);
-            Console.WriteLine("\t  Labor Cost: {0}", orderInfo.LaborCost);
-            Console.WriteLine("\t  Tax: {0}", orderInfo.Tax);
+            Console.WriteLine("\t  Cost Per Square Foot: {0:c}", orderInfo.CostSqFt);
+            Console.WriteLine("\t  Labor Per Square Foot: {0:c}", orderInfo.LaborSqFt);
+            Console.WriteLine("\t  Material Cost: {0:c}", orderInfo.MaterialCost);
+            Console.WriteLine("\t  Labor Cost: {0:c}", orderInfo.LaborCost);
+            Console.WriteLine("\t  Tax: {0:c}", orderInfo.Tax);
             Console.WriteLine("\t  Total: {0:c}", orderInfo.Total);
             Console.WriteLine();
+            Console.WriteLine("\tPress Enter for Main Menu");
         }
 
     }

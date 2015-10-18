@@ -14,19 +14,6 @@ namespace FlooringMastery.UI.Workflows
         private int orderNumber;
         private Order _currentOrder;
 
-        //private string name;
-        //private string state;
-        //private decimal taxRate;
-        //private decimal costPerSquareFt;
-        //private decimal area;
-        //private decimal materialCost;
-        //private decimal laborPerSquareFt;
-        //private decimal tax;
-        //private string product;
-        //private decimal laborCost;
-        //private decimal total;
-
-
         public void Execute()
         {
             DisplayOrderWorkflow dowf = new DisplayOrderWorkflow();
@@ -53,7 +40,7 @@ namespace FlooringMastery.UI.Workflows
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("\t*******Order Number: {0}  ********", _currentOrder.OrderNumber);
             Console.ForegroundColor = ConsoleColor.White;
-            Console.Write("\tLast Name ({0}): ", _currentOrder.LastName);
+            Console.Write("\tLast Name ({0}): ", _currentOrder.LastName.ToUpper());
             string inputN = Console.ReadLine();
             if (inputN != "")
             {
@@ -64,7 +51,9 @@ namespace FlooringMastery.UI.Workflows
         public void ChangeState()
         {
             OrderOperations ops = new OrderOperations();
-            Console.Write("\tState ({0}): ", _currentOrder.State);
+            Console.ForegroundColor = ConsoleColor.White;
+
+            Console.Write("\tState ({0}): ", _currentOrder.State.ToUpper());
             string inputS = Console.ReadLine();
 
             if (inputS.Length <= 2)
@@ -81,7 +70,9 @@ namespace FlooringMastery.UI.Workflows
         public void ChangeProduct()
         {
             OrderOperations ops = new OrderOperations();
-            Console.Write("\tProduct Type ({0}): ", _currentOrder.ProductType);
+            Console.ForegroundColor = ConsoleColor.White;
+
+            Console.Write("\tProduct Type ({0}): ", _currentOrder.ProductType.ToUpper());
             string inputP = Console.ReadLine();
             if (inputP != "")  //want to change product
             {
@@ -95,7 +86,9 @@ namespace FlooringMastery.UI.Workflows
         public void ChangeArea()
         {
             string inputB = "";
-           Console.Write("\tArea {0}:", _currentOrder.Area);
+            Console.ForegroundColor = ConsoleColor.White;
+
+            Console.Write("\tArea {0}:", _currentOrder.Area);
             inputB = (Console.ReadLine());
 
             if (inputB != "")
@@ -143,6 +136,8 @@ namespace FlooringMastery.UI.Workflows
             ////*************************************************************************************
 
             Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+
             Console.WriteLine("\tHere is your new order information:  ");
             DisplayOrderWorkflow dowf = new DisplayOrderWorkflow();
             Response response = new Response();
@@ -151,7 +146,7 @@ namespace FlooringMastery.UI.Workflows
             Order newEditedOrder = response.OrderInfo;
             response = ops.EditOrder(formattedDate, orderNumber, _currentOrder);
             dowf.PrintOrderInformation(response.OrderInfo);
-            Console.WriteLine("\tPress enter for Main Menu...");
+            Console.ForegroundColor = ConsoleColor.White;
             return newEditedOrder;
         }
     }

@@ -15,6 +15,9 @@ namespace FlooringMastery.BLL
 {
     public class OrderOperations
     {
+        ErrorLog log = new ErrorLog();
+      
+
         // private DateTime orderDate;
         private IDataRepository _repo;
 
@@ -44,7 +47,11 @@ namespace FlooringMastery.BLL
             else
             {
                 response.Success = false;
+                Console.ForegroundColor = ConsoleColor.Red;
+
                 response.Message = "This is not the order date you are looking for...";
+                log.ErrorMessage = "That was not the order date you are looking for BLL:GetOrderDate....";
+                CallingErrorLogRepository(log.ErrorMessage);
                 return null;
             }
         }
@@ -76,7 +83,11 @@ namespace FlooringMastery.BLL
             else
             {
                 response.Success = false;
+                Console.ForegroundColor = ConsoleColor.Red;
+
                 response.Message = "This is not the order number you are looking for...";
+                log.ErrorMessage = "That was not the order number you are looking for BLL:GetOrder....";
+                CallingErrorLogRepository(log.ErrorMessage);
             }
 
             return response;
@@ -165,8 +176,12 @@ namespace FlooringMastery.BLL
                             isValid = true;
                             break;
                         default:
+                            Console.ForegroundColor = ConsoleColor.Red;
+
                             Console.WriteLine("That was not a valid state.");
                             Console.WriteLine("Please reenter state...");
+                            log.ErrorMessage = "That was not a valid state  BLL:MatchState....";
+                            CallingErrorLogRepository(log.ErrorMessage);
                             break;
                     }
 
@@ -193,8 +208,12 @@ namespace FlooringMastery.BLL
                         isValid = true;
                         break;
                     default:
+                        Console.ForegroundColor = ConsoleColor.Red;
+
                         Console.WriteLine("That was not a valid state.");
                         Console.WriteLine("Please reenter state...");
+                        log.ErrorMessage = "That was not a valid state  BLL:MatchState....";
+                        CallingErrorLogRepository(log.ErrorMessage);
                         break;
                 }
 
@@ -229,8 +248,11 @@ namespace FlooringMastery.BLL
                     isValid = true;
                     break;
                 default:
+                    Console.ForegroundColor = ConsoleColor.Red;
 
                     Console.WriteLine("That was not a valid product type.");
+                    log.ErrorMessage = "That was not a valid product type  BLL:ReturnCostPerSqFT....";
+                    CallingErrorLogRepository(log.ErrorMessage);
                     return costPerSqFt = 0;
             }
             costPerSqFt = _repo.GetCostPerSqFt(upperProduct);
@@ -292,13 +314,18 @@ namespace FlooringMastery.BLL
             {
                 response.Success = true;
                 response.Message = "The order you were trying to delete has been successfully deleted.";
+               
 
             }
             else
             {
                 //need to do as TRY CATCH ---IF reach here wil have entered something other than an order num
                 response.Success = false;
+                Console.ForegroundColor = ConsoleColor.Red;
+
                 response.Message = "You were not able to delete that order.";
+                log.ErrorMessage = "Not able to delete order  BLL:OrderToDel....";
+                CallingErrorLogRepository(log.ErrorMessage);
             }
 
             return response;
@@ -318,7 +345,11 @@ namespace FlooringMastery.BLL
             else
             {
                 response.Success = false;
+                Console.ForegroundColor = ConsoleColor.Red;
+
                 response.Message = "The Edit was not sucessful in operations/EditOrder.";
+                log.ErrorMessage = "That Edit was not sucessful  BLL:EditOrder....";
+                CallingErrorLogRepository(log.ErrorMessage);
             }
             response.OrderInfo = revisedOrder;
             return response;

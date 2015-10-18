@@ -86,8 +86,8 @@ namespace FlooringMastery.UI.Workflows
                     break;
                default:
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("{0} is an invalid entry!", choice);
-                    Console.WriteLine("Press enter to continue...");
+                    Console.WriteLine("\t{0} is an invalid entry!", choice);
+                    Console.WriteLine("\tPress enter to continue...");
                     Console.ReadLine();
                     break;
             }

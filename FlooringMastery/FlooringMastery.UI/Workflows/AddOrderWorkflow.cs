@@ -10,6 +10,8 @@ namespace FlooringMastery.UI.Workflows
 {
     public class AddOrderWorkflow
     {
+        OrderOperations ops = new OrderOperations();
+        ErrorLog log = new ErrorLog();
 
        //private Order _currentOrder;
         private string formattedDate;
@@ -39,21 +41,27 @@ namespace FlooringMastery.UI.Workflows
             Order order = new Order();
             bool isValid = false;
             decimal stateRate = 0;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Clear();
+            Console.WriteLine("\tEnter Account Information");
+            Console.WriteLine("\t----------------------");
+            Console.ForegroundColor = ConsoleColor.White;
 
-            Console.WriteLine("Enter Account Information");
-            Console.WriteLine("----------------------");
-           
-            Console.Write("Last Name: ");
+            Console.Write("\tLast Name: ");
             order.LastName = Console.ReadLine();
 
             do
             {
-                Console.Write("State: ");
+                Console.ForegroundColor = ConsoleColor.White;
+
+                Console.Write("\tState: ");
                 order.State = Console.ReadLine();
                 //string state = order.State;
                 if (order.State.Length < 2)
                 {
-                    Console.WriteLine("That was not a valid entry.\n Please enter a state...");
+                    Console.WriteLine("\tThat was not a valid entry.\n Please enter a state...");
+                    log.ErrorMessage = "That was not a valid entry(state) UI:PopulateOrder/AddWorkflow....";
+                    ops.CallingErrorLogRepository(log.ErrorMessage);
                 }
                 else
                 {
@@ -64,8 +72,9 @@ namespace FlooringMastery.UI.Workflows
 
             //setting tax rate based on state
             order.TaxRate = stateRate;
+            Console.ForegroundColor = ConsoleColor.White;
 
-            Console.WriteLine("Your tax rate is {0}: ", order.TaxRate);
+            Console.WriteLine("\tYour tax rate is {0}: ", order.TaxRate);
 
 
             //-------------PRODUCT-----------------------
@@ -73,15 +82,19 @@ namespace FlooringMastery.UI.Workflows
             Product product = new Product();
             do
             {
+                Console.ForegroundColor = ConsoleColor.White;
+
                 //Console.WriteLine("");
-                Console.WriteLine("Plese enter a product type: Carpet, Laminate, Tile, Wood: ");
+                Console.Write("\tPlese enter a product type:\n\t\t Carpet, Laminate, Tile, Wood: ");
                 
                 order.ProductType = Console.ReadLine();
 
                
                 if (order.ProductType.Length > 8 || order.ProductType.Length < 1)
                 {
-                    Console.WriteLine("That was not a valid entry.\n Please enter a product...");
+                    Console.WriteLine("\tThat was not a valid entry.\n Please enter a product...");
+                    log.ErrorMessage = "That was not a valid entry (product) UI:PopulateOrder....";
+                    ops.CallingErrorLogRepository(log.ErrorMessage);
                 }
                 else
                 {
@@ -91,21 +104,29 @@ namespace FlooringMastery.UI.Workflows
                 }
             } while (order.CostSqFt == 0);// is 0
 
-            Console.WriteLine("Your cost per square foot is {0:c}: ", order.CostSqFt);
+            Console.ForegroundColor = ConsoleColor.White;
+
+            Console.WriteLine("\tYour cost per square foot is {0:c}: ", order.CostSqFt);
 
             // getting labor per square foot
             order.LaborSqFt = ops.LaborPerSquareFt(order.ProductType);
+            Console.ForegroundColor = ConsoleColor.White;
 
-            Console.WriteLine("Your labor per square foot is {0:c}: ", order.LaborSqFt);
+            Console.WriteLine("\tYour labor per square foot is {0:c}: ", order.LaborSqFt);
 
             // getting area 
-            Console.Write("Area: ");
+            Console.ForegroundColor = ConsoleColor.White;
+
+            Console.Write("\tArea: ");
             order.Area = decimal.Parse(Console.ReadLine());
             do
             {
                 if (order.Area <= 0)
                 {
-                    Console.WriteLine("You need to get a bigger house!");
+                    Console.WriteLine("\tYou need to get a bigger house!");
+                    log.ErrorMessage = "That was not a valid area (area) UI:PopulateOrder....";
+                    ops.CallingErrorLogRepository(log.ErrorMessage);
+
                     //error log
                 }
             } while (order.Area <= 0);
@@ -114,20 +135,25 @@ namespace FlooringMastery.UI.Workflows
 
             // getting material cost
             order.MaterialCost = ops.MaterialCost(order.ProductType, order.Area);
+            Console.ForegroundColor = ConsoleColor.White;
 
-            Console.Write("Material Cost: {0:c} ", order.MaterialCost);
-          
+            Console.Write("\tMaterial Cost: {0:c} ", order.MaterialCost);
+
             //getting labor cost
+            Console.ForegroundColor = ConsoleColor.White;
 
             order.LaborCost = ops.LaborCost(order.ProductType, order.Area);
             Console.Write("\nLabor Cost: {0:c} ", order.LaborCost); 
            
             //get tax
-            
+            Console.ForegroundColor = ConsoleColor.White;
+
             order.Tax = ops.Tax(order.State, order.MaterialCost);
             Console.Write("\nTax: {0:c} ", order.Tax);
 
             //get total
+            Console.ForegroundColor = ConsoleColor.White;
+
             Console.Write("\nTotal: {0:c}", order.Total);  
             order.Total =  ops.Total(order.MaterialCost, order.Tax, order.LaborCost);
 
@@ -136,15 +162,14 @@ namespace FlooringMastery.UI.Workflows
             ops.CreateOrder(order, formattedDate);
 
            Console.Clear();
-           Console.WriteLine("Here is your new order information:  ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+
+            Console.WriteLine("\n\tHere is your new order information:  \n");
             DisplayOrderWorkflow dowf = new DisplayOrderWorkflow();
             dowf.PrintOrderInformation(order);
+            Console.ForegroundColor = ConsoleColor.White;
 
-            Console.WriteLine("Press enter for Main Menu...");
         }
-
-
-
     }
 }
 
