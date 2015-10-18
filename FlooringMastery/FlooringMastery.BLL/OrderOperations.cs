@@ -152,6 +152,7 @@ namespace FlooringMastery.BLL
         public decimal MatchState(string state)
         {
             bool isValid = false;
+            decimal badInput = 0;
             decimal taxRate = 0;
             string abbr = "";
             do
@@ -182,7 +183,7 @@ namespace FlooringMastery.BLL
                             Console.WriteLine("Please reenter state...");
                             log.ErrorMessage = "That was not a valid state  BLL:MatchState....";
                             CallingErrorLogRepository(log.ErrorMessage);
-                            break;
+                            return badInput;
                     }
 
                     taxRate = _repo.GetStateTaxRate(upperState);
@@ -214,7 +215,7 @@ namespace FlooringMastery.BLL
                         Console.WriteLine("Please reenter state...");
                         log.ErrorMessage = "That was not a valid state  BLL:MatchState....";
                         CallingErrorLogRepository(log.ErrorMessage);
-                        break;
+                        return badInput;
                 }
 
             } while (!isValid);
@@ -228,6 +229,7 @@ namespace FlooringMastery.BLL
         {
 
             decimal costPerSqFt = 0;
+            //decimal badInput = 0;
             string upperProduct = ProductType.ToUpper();
             bool isValid = false;
 
@@ -253,7 +255,7 @@ namespace FlooringMastery.BLL
                     Console.WriteLine("That was not a valid product type.");
                     log.ErrorMessage = "That was not a valid product type  BLL:ReturnCostPerSqFT....";
                     CallingErrorLogRepository(log.ErrorMessage);
-                    return costPerSqFt = 0;
+                    return costPerSqFt;
             }
             costPerSqFt = _repo.GetCostPerSqFt(upperProduct);
 
@@ -359,6 +361,20 @@ namespace FlooringMastery.BLL
         {
             ErrorLogRepository log = new ErrorLogRepository();
             log.MyLogFile(strgMsg);
+        }
+
+        public bool ValidateInput(string input)
+        {
+            char[] badInput = {',', '/','\\', '.', '*', '!', '@', '#', '$', '%', '^', '&', '(', ')', ':', ';', '"',};
+            foreach (var c in badInput)
+            {
+                if (input.Contains(badInput[c]))
+                {
+                    return false;
+                } 
+            }
+
+            return true;
         }
 
 

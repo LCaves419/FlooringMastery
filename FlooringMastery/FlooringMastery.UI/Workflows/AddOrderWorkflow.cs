@@ -67,6 +67,10 @@ namespace FlooringMastery.UI.Workflows
                 {
                     isValid = true;
                     stateRate = ops.MatchState(order.State);
+                    if (stateRate == 0)
+                    {
+                        isValid = false;
+                    }
                 }
             } while (!isValid);
 
@@ -85,13 +89,14 @@ namespace FlooringMastery.UI.Workflows
                 Console.ForegroundColor = ConsoleColor.White;
 
                 //Console.WriteLine("");
-                Console.Write("\tPlese enter a product type:\n\t\t Carpet, Laminate, Tile, Wood: ");
+                Console.Write("\tPlease enter a product type:\n\t\t Carpet, Laminate, Tile, Wood: ");
                 
                 order.ProductType = Console.ReadLine();
 
                
                 if (order.ProductType.Length > 8 || order.ProductType.Length < 1)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("\tThat was not a valid entry.\n Please enter a product...");
                     log.ErrorMessage = "That was not a valid entry (product) UI:PopulateOrder....";
                     ops.CallingErrorLogRepository(log.ErrorMessage);
