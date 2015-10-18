@@ -24,27 +24,51 @@ namespace FlooringMastery.BLL
             _repo = DataFactory.CreateDataRepository();
 
         }
-
+/// <summary>
+/// validates the order date exists
+/// </summary>
+/// <param name="OrderDate"></param>
+/// <returns></returns>
         public string GetOrderDate(DateTime OrderDate)
         {
             List<Order> order = new List<Order>();
             Response response = new Response();
             string newFileName = _repo.GetOrderFile(OrderDate);
 
+
             if (File.Exists(newFileName))
             {
-
+                response.Success = true;
                 return newFileName;
-
-
             }
-            // Console.WriteLine("That date does not match a a date in our files");
+            else
+            {
+                response.Success = false;
+                response.Message = "This is not the order date you are looking for...";
+                return null;
+            }
+
+            
+
+            //if (File.Exists(newFileName))
+            //{
+
+            //    return newFileName;
+
+
+            //}
+            //Console.WriteLine("That date does not match a a date in our files");
             //write this error to the error log
-            return "That date does not match a a date in our files";
+            //return "That date does not match a a date in our files";
         }
 
 
-
+        /// <summary>
+        /// brings back an order using the order number, validates the actual order number exists
+        /// </summary>
+        /// <param name="newFileName"></param>
+        /// <param name="orderNumber"></param>
+        /// <returns></returns>
         public Response GetOrder(string newFileName, int orderNumber)
         {
             var response = new Response();
@@ -59,7 +83,7 @@ namespace FlooringMastery.BLL
             else
             {
                 response.Success = false;
-                response.Message = "This is not the Date you are looking for...";
+                response.Message = "This is not the order number you are looking for...";
             }
 
             return response;
@@ -71,10 +95,10 @@ namespace FlooringMastery.BLL
             _repo.WriteNewLine(order, formattedDate);
         }
 
-        //checking to see if there is already a date file
+        
         /// <summary>
         /// 
-        /// </summary>
+        /// </summary>checks to see if a date file already exists
         /// <param name="currentDate"></param>
         /// <returns></returns>
         public string CheckFileDate(DateTime currentDate)

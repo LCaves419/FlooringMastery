@@ -20,13 +20,14 @@ namespace FlooringMastery.Data.DataRepositories
         private string file;
         //DataFiles\TestFiles\    .txt
         //converts datetime to string format
+
         public string GetOrderFile(DateTime OrderDate)
         {
             var newOrderDate = _filePath + "Orders_" + OrderDate.ToString("MMddyyyy") + ".txt";
 
             file = newOrderDate;
             return newOrderDate;
-            //return _filePath.FirstOrDefault(a => a. == orderNumber);
+            // _filePath.FirstOrDefault(a => a. == file);
         }
 
         //returns all orders of a specific date

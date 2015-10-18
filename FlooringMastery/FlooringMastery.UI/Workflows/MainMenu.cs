@@ -14,20 +14,41 @@ namespace FlooringMastery.UI.Workflows
             string input = "";
             do
             {
-
                 Console.Clear();
-                Console.WriteLine("*****************************");
-                Console.WriteLine("Flooring Program");
-                Console.WriteLine();
-                Console.WriteLine("1.  Display Orders");
-                Console.WriteLine("2.  Add an Order");
-                Console.WriteLine("3.  Edit an Order");
-                Console.WriteLine("4.  Remove an Order");
-                Console.WriteLine("5.  Quit");
                 Console.WriteLine();
                 Console.WriteLine();
-                Console.WriteLine("*****************************");
-                Console.Write("Enter Choice:  ");
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                Console.WriteLine("\t*************************");
+                Console.WriteLine("\t*************************");
+                Console.ForegroundColor = ConsoleColor.White;
+
+                Console.WriteLine("\t     WELCOME TO SG CORP \n");
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+
+                Console.WriteLine("\t*************************");
+                Console.WriteLine("\t*************************");
+                Console.ForegroundColor = ConsoleColor.White;
+
+                Console.WriteLine("\t        MAIN MENU");
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+
+
+                Console.WriteLine("\t*************************");
+                Console.ForegroundColor = ConsoleColor.White;
+
+                Console.WriteLine();
+                Console.WriteLine("\t1.  Display Orders");
+                Console.WriteLine("\t2.  Add an Order");
+                Console.WriteLine("\t3.  Edit an Order");
+                Console.WriteLine("\t4.  Remove an Order");
+                Console.WriteLine("\t5.  Quit");
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+
+                Console.WriteLine("\t*************************");
+                Console.WriteLine("\t*************************");
+                Console.ForegroundColor = ConsoleColor.White;
+
+                Console.Write("\t   Enter Choice:  ");
 
                 input = Console.ReadLine();
 
@@ -37,7 +58,6 @@ namespace FlooringMastery.UI.Workflows
                 }
 
             } while (input != "5");
-
         }
 
         private void ProcessChoice(string choice)
@@ -55,20 +75,17 @@ namespace FlooringMastery.UI.Workflows
                     Console.ReadLine();
                     break;
                 case "3":
-                    //Console.WriteLine("This feature is not implemented yet!");
-                    //Console.WriteLine("Press enter to continue...");
-                    EditOrderWorkflow eowf = new EditOrderWorkflow();
+                   EditOrderWorkflow eowf = new EditOrderWorkflow();
                     eowf.Execute();
                     Console.ReadLine();
                     break;
                 case "4":
-                    //Console.WriteLine("This feature is not implemented yet!");
-                    //Console.WriteLine("Press enter to continue...");
-                    RemoveOrderWorkflow rowf = new RemoveOrderWorkflow();
+                   RemoveOrderWorkflow rowf = new RemoveOrderWorkflow();
                     rowf.Execute();
                     Console.ReadLine();
                     break;
                default:
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("{0} is an invalid entry!", choice);
                     Console.WriteLine("Press enter to continue...");
                     Console.ReadLine();
