@@ -103,7 +103,6 @@ namespace FlooringMastery.UI.Workflows
             order.Area = decimal.Parse(Console.ReadLine());
             do
             {
-                
                 if (order.Area <= 0)
                 {
                     Console.WriteLine("You need to get a bigger house!");

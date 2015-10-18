@@ -95,22 +95,22 @@ namespace FlooringMastery.UI.Workflows
             }
         }
 
-        public void PrintOrderInformation(Order OrderInfo)
+        public void PrintOrderInformation(Order orderInfo)
         {
             Console.WriteLine("Account Information");
             Console.WriteLine("----------------------");
-            Console.WriteLine("Account Number {0}", OrderInfo.OrderNumber);
-            Console.WriteLine("Name: {0}", OrderInfo.LastName);
-            Console.WriteLine("State: {0}", OrderInfo.State);
-            Console.WriteLine("TaxRate: {0}", OrderInfo.TaxRate);
-            Console.WriteLine("ProductType: {0}", OrderInfo.ProductType);
-            Console.WriteLine("Area: {0}", OrderInfo.Area);
-            Console.WriteLine("Cost Per Square Foot: {0}", OrderInfo.CostSqFt);
-            Console.WriteLine("Labor Per Square Foot: {0}", OrderInfo.LaborSqFt);
-            Console.WriteLine("Material Cost: {0}", OrderInfo.MaterialCost);
-            Console.WriteLine("Labor Cost: {0}", OrderInfo.LaborCost);
-            Console.WriteLine("Tax: {0}", OrderInfo.Tax);
-            Console.WriteLine("Total: {0:c}", OrderInfo.Total);
+            Console.WriteLine("Account Number {0}", orderInfo.OrderNumber);
+            Console.WriteLine("Name: {0}", orderInfo.LastName);
+            Console.WriteLine("State: {0}", orderInfo.State);
+            Console.WriteLine("TaxRate: {0}", orderInfo.TaxRate);
+            Console.WriteLine("ProductType: {0}", orderInfo.ProductType);
+            Console.WriteLine("Area: {0}", orderInfo.Area);
+            Console.WriteLine("Cost Per Square Foot: {0:c}", orderInfo.CostSqFt);
+            Console.WriteLine("Labor Per Square Foot: {0:c}", orderInfo.LaborSqFt);
+            Console.WriteLine("Material Cost: {0:c}", orderInfo.MaterialCost);
+            Console.WriteLine("Labor Cost: {0:c}", orderInfo.LaborCost);
+            Console.WriteLine("Tax: {0:c}", orderInfo.Tax);
+            Console.WriteLine("Total: {0:c}", orderInfo.Total);
             Console.WriteLine();
 
         }

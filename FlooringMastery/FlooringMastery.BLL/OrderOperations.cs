@@ -134,6 +134,26 @@ namespace FlooringMastery.BLL
 
                 if (upperState.Length == 2)
                 {
+                    switch (upperState)
+                    {
+                        case "OH":
+                            isValid = true;
+                            break;
+                        case "PA":
+                            isValid = true;
+                            break;
+                        case "MI":
+                            isValid = true;
+                            break;
+                        case "IN":
+                            isValid = true;
+                            break;
+                        default:
+                            Console.WriteLine("That was not a valid state.");
+                            Console.WriteLine("Please reenter state...");
+                            break;
+                    }
+
                     taxRate = _repo.GetStateTaxRate(upperState);
                     return taxRate;
                 }
@@ -268,16 +288,42 @@ namespace FlooringMastery.BLL
         return response;
     }
 
-    public Order EditOrder(string formattedDate, int orderNumber, Order changedOrder)
+    public Response EditOrder(string formattedDate, int orderNumber, Order changedOrder)
     {
         Response response = new Response();
         _repo.GetEditedOrder(formattedDate, orderNumber, changedOrder);
-        Order revisedOrder = _repo.SortNewEditedFile(formattedDate, orderNumber);
-        // _repo.EditSameLine(formattedDate, orderNumber);
+            var revisedOrder = _repo.SortNewEditedFile(formattedDate, orderNumber);
 
-        return revisedOrder;
+            if (revisedOrder != null)
+            {
+                response.Success = true;
+                response.OrderInfo = revisedOrder;
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = "The Edit was not sucessful in operations/EditOrder.";
+            }
+        response.OrderInfo = revisedOrder;
+            return response;
+            
     }
 
+        //public Response GetOrder(string newFileName, int orderNumber)
+        //var response = new Response();
+        //var order = _repo.GetOrderNumber(newFileName, orderNumber);
+        //    if (order != null)
+        //    {
+        //        response.Success = true;
+        //        response.OrderInfo = order;
+        //    }
+        //    else
+        //    {
+        //        response.Success = false;
+        //        response.Message = "This is not the Date you are looking for...";
+        //    }
+
+        //    return response;
 }
 
 
