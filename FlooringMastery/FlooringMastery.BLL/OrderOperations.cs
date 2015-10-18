@@ -363,12 +363,12 @@ namespace FlooringMastery.BLL
             log.MyLogFile(strgMsg);
         }
 
-        public bool ValidateInput(string input)
+        public bool ValidateInput(char[] input)
         {
             char[] badInput = {',', '/','\\', '.', '*', '!', '@', '#', '$', '%', '^', '&', '(', ')', ':', ';', '"',};
-            foreach (var c in badInput)
+            for (int i = 0; i <= badInput.Length; i++)
             {
-                if (input.Contains(badInput[c]))
+                if (input.Contains(badInput[i]))
                 {
                     return false;
                 } 

@@ -47,9 +47,31 @@ namespace FlooringMastery.UI.Workflows
             Console.WriteLine("\t----------------------");
             Console.ForegroundColor = ConsoleColor.White;
 
-            Console.Write("\tLast Name: ");
-            order.LastName = Console.ReadLine();
 
+            bool checkedInput = false;
+            do
+            {
+                Console.Write("\tLast Name: ");
+                order.LastName = Console.ReadLine();
+
+                checkedInput = ops.ValidateInput(order.LastName.ToCharArray());
+
+                if (checkedInput == false)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\tNo special characters in name are permitted.\n\t Please enter valid name");
+                    log.ErrorMessage = "That was not a valid name(name) UI:PopulateOrder/AddWorkflow....";
+                    ops.CallingErrorLogRepository(log.ErrorMessage);
+                }
+
+                else
+                {
+                    checkedInput = true;
+                }
+
+            } while (checkedInput == false);
+            
+             
             do
             {
                 Console.ForegroundColor = ConsoleColor.White;
