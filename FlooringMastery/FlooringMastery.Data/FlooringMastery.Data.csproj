@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataRepositories\DataFactory.cs" />
-    <Compile Include="DataRepositories\OrderRepository.cs" />
+    <Compile Include="DataRepositories\ErrorLogRepository.cs" />
     <Compile Include="DataRepositories\ProdRepository.cs" />
     <Compile Include="DataRepositories\TestRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

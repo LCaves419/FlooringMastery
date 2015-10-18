@@ -24,11 +24,11 @@ namespace FlooringMastery.BLL
             _repo = DataFactory.CreateDataRepository();
 
         }
-/// <summary>
-/// validates the order date exists
-/// </summary>
-/// <param name="OrderDate"></param>
-/// <returns></returns>
+        /// <summary>
+        /// validates the order date exists
+        /// </summary>
+        /// <param name="OrderDate"></param>
+        /// <returns></returns>
         public string GetOrderDate(DateTime OrderDate)
         {
             List<Order> order = new List<Order>();
@@ -53,7 +53,7 @@ namespace FlooringMastery.BLL
         {
             List<Order> allOrders = _repo.GetDataInformation(formattedDate);
             return allOrders;
-        } 
+        }
 
 
         /// <summary>
@@ -81,14 +81,13 @@ namespace FlooringMastery.BLL
 
             return response;
         }
-
         public void CreateOrder(Order order, string formattedDate)
         {
             Response response = new Response();
             _repo.WriteNewLine(order, formattedDate);
         }
 
-        
+
         /// <summary>
         /// 
         /// </summary>checks to see if a date file already exists
@@ -208,7 +207,7 @@ namespace FlooringMastery.BLL
 
         public decimal ReturnCostPerSquareFoot(string ProductType)
         {
-            
+
             decimal costPerSqFt = 0;
             string upperProduct = ProductType.ToUpper();
             bool isValid = false;
@@ -219,7 +218,7 @@ namespace FlooringMastery.BLL
                 case "CARPET":
                     isValid = true;
                     break;
-                    
+
                 case "LAMINATE":
                     isValid = true;
                     break;
@@ -230,18 +229,18 @@ namespace FlooringMastery.BLL
                     isValid = true;
                     break;
                 default:
-                   
+
                     Console.WriteLine("That was not a valid product type.");
                     return costPerSqFt = 0;
             }
             costPerSqFt = _repo.GetCostPerSqFt(upperProduct);
-           
+
             return costPerSqFt;
         }
 
         public decimal LaborPerSquareFt(string upperProduct)
         {
-           
+
             decimal laborPerSquareFt = _repo.GetLaborPerSquareFt(upperProduct);
             return laborPerSquareFt;
         }
@@ -250,14 +249,14 @@ namespace FlooringMastery.BLL
         {
             decimal costPerSquareFt = _repo.GetCostPerSqFt(upperProduct);
 
-            decimal materialCost = (costPerSquareFt*area);
+            decimal materialCost = (costPerSquareFt * area);
             return materialCost;
         }
 
         public decimal LaborCost(string upperProduct, decimal area)
         {
             decimal laborCostPerSquareFt = _repo.GetLaborPerSquareFt(upperProduct);
-            decimal laborCost = area*laborCostPerSquareFt;
+            decimal laborCost = area * laborCostPerSquareFt;
 
             return laborCost;
         }
@@ -265,50 +264,50 @@ namespace FlooringMastery.BLL
         public decimal Tax(string state, decimal materialCost)
         {
             decimal taxRate = _repo.GetStateTaxRate(state);
-            decimal newTaxRate = taxRate/100;
-            decimal tax = materialCost*newTaxRate;
+            decimal newTaxRate = taxRate / 100;
+            decimal tax = materialCost * newTaxRate;
 
             return tax;
         }
 
         public decimal Total(decimal materialCost, decimal tax, decimal laborCost)
         {
-            decimal total = (materialCost*tax) + laborCost;
+            decimal total = (materialCost * tax) + laborCost;
             return total;
         }
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="formattedDate"></param>
-    /// <param name="orderNumber"></param>
-    /// <returns></returns>
-    public Response OrderToDelete(string formattedDate, int orderNumber)
-    {
-        var response = new Response();
-
-        // Order deletedOrder = _repo.GetOrderNumber(formattedDate, orderNumber);
-        bool deletedNum = _repo.DeleteOrder(formattedDate, orderNumber);
-
-        if (deletedNum)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="formattedDate"></param>
+        /// <param name="orderNumber"></param>
+        /// <returns></returns>
+        public Response OrderToDelete(string formattedDate, int orderNumber)
         {
-            response.Success = true;
-            response.Message = "The order you were trying to delete has been successfully deleted.";
+            var response = new Response();
 
+            // Order deletedOrder = _repo.GetOrderNumber(formattedDate, orderNumber);
+            bool deletedNum = _repo.DeleteOrder(formattedDate, orderNumber);
+
+            if (deletedNum)
+            {
+                response.Success = true;
+                response.Message = "The order you were trying to delete has been successfully deleted.";
+
+            }
+            else
+            {
+                //need to do as TRY CATCH ---IF reach here wil have entered something other than an order num
+                response.Success = false;
+                response.Message = "You were not able to delete that order.";
+            }
+
+            return response;
         }
-        else
+
+        public Response EditOrder(string formattedDate, int orderNumber, Order changedOrder)
         {
-            //need to do as TRY CATCH ---IF reach here wil have entered something other than an order num
-            response.Success = false;
-            response.Message = "You were not able to delete that order.";
-        }
-
-        return response;
-    }
-
-    public Response EditOrder(string formattedDate, int orderNumber, Order changedOrder)
-    {
-        Response response = new Response();
-        _repo.GetEditedOrder(formattedDate, orderNumber, changedOrder);
+            Response response = new Response();
+            _repo.GetEditedOrder(formattedDate, orderNumber, changedOrder);
             var revisedOrder = _repo.SortNewEditedFile(formattedDate, orderNumber);
 
             if (revisedOrder != null)
@@ -321,29 +320,18 @@ namespace FlooringMastery.BLL
                 response.Success = false;
                 response.Message = "The Edit was not sucessful in operations/EditOrder.";
             }
-        response.OrderInfo = revisedOrder;
+            response.OrderInfo = revisedOrder;
             return response;
-            
+        }
+
+        public void CallingErrorLogRepository(string strgMsg)
+        {
+            ErrorLogRepository log = new ErrorLogRepository();
+            log.MyLogFile(strgMsg);
+        }
+
+
     }
-
-        //public Response GetOrder(string newFileName, int orderNumber)
-        //var response = new Response();
-        //var order = _repo.GetOrderNumber(newFileName, orderNumber);
-        //    if (order != null)
-        //    {
-        //        response.Success = true;
-        //        response.OrderInfo = order;
-        //    }
-        //    else
-        //    {
-        //        response.Success = false;
-        //        response.Message = "This is not the Date you are looking for...";
-        //    }
-
-        //    return response;
-}
-
-
 }
 
 

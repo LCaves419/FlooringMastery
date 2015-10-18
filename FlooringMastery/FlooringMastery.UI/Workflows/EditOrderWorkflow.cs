@@ -31,7 +31,7 @@ namespace FlooringMastery.UI.Workflows
         {
             DisplayOrderWorkflow dowf = new DisplayOrderWorkflow();
             formattedDate = dowf.GetOrderDateFromUser();
-            orderNumber = dowf.GetOrderNumberFromUser();
+            orderNumber = dowf.DisplayAllAccounts(formattedDate);
             //_the current order returns order before it's edited
             _currentOrder = dowf.DisplayOrderInformation(formattedDate, orderNumber);
             ChangeName();
@@ -48,8 +48,11 @@ namespace FlooringMastery.UI.Workflows
 
         public void ChangeName()
         {
-            Console.WriteLine("Press enter to accept the current information in each field.\n To make changes enter new information.");
-            Console.WriteLine("\t*******Order Number: {0}  ********", _currentOrder.LastName);
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("\tPress enter to accept the current information in each field.\n\t To make changes enter new information.");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("\t*******Order Number: {0}  ********", _currentOrder.OrderNumber);
+            Console.ForegroundColor = ConsoleColor.White;
             Console.Write("\tLast Name ({0}): ", _currentOrder.LastName);
             string inputN = Console.ReadLine();
             if (inputN != "")
@@ -61,7 +64,7 @@ namespace FlooringMastery.UI.Workflows
         public void ChangeState()
         {
             OrderOperations ops = new OrderOperations();
-            Console.Write("State ({0}): ", _currentOrder.State);
+            Console.Write("\tState ({0}): ", _currentOrder.State);
             string inputS = Console.ReadLine();
 
             if (inputS.Length <= 2)
@@ -78,7 +81,7 @@ namespace FlooringMastery.UI.Workflows
         public void ChangeProduct()
         {
             OrderOperations ops = new OrderOperations();
-            Console.Write("Product Type ({0}): ", _currentOrder.ProductType);
+            Console.Write("\tProduct Type ({0}): ", _currentOrder.ProductType);
             string inputP = Console.ReadLine();
             if (inputP != "")  //want to change product
             {
@@ -92,7 +95,7 @@ namespace FlooringMastery.UI.Workflows
         public void ChangeArea()
         {
             string inputB = "";
-           Console.Write("Area {0}:", _currentOrder.Area);
+           Console.Write("\tArea {0}:", _currentOrder.Area);
             inputB = (Console.ReadLine());
 
             if (inputB != "")
@@ -140,7 +143,7 @@ namespace FlooringMastery.UI.Workflows
             ////*************************************************************************************
 
             Console.Clear();
-            Console.WriteLine("Here is your new order information:  ");
+            Console.WriteLine("\tHere is your new order information:  ");
             DisplayOrderWorkflow dowf = new DisplayOrderWorkflow();
             Response response = new Response();
             //dowf.DisplayOrderInformation(EditedOrder);
@@ -148,32 +151,9 @@ namespace FlooringMastery.UI.Workflows
             Order newEditedOrder = response.OrderInfo;
             response = ops.EditOrder(formattedDate, orderNumber, _currentOrder);
             dowf.PrintOrderInformation(response.OrderInfo);
-            Console.WriteLine("Press enter for Main Menu...");
+            Console.WriteLine("\tPress enter for Main Menu...");
             return newEditedOrder;
         }
-
-        //var ops = new OrderOperations();
-
-        //var response = ops.GetOrder(file, orderNumber);
-        //_currentOrder = response.OrderInfo;
-
-        //    if (response.Success)
-        //    {
-        //        //_currentOrder = response.OrderInfo;
-        //        PrintOrderInformation(response.OrderInfo);
-        //        return _currentOrder;
-
-        //        }
-        //    else
-        //    {
-        //        Console.WriteLine("Error occurred!!");
-        //        Console.WriteLine(response.Message);
-        //        Console.WriteLine("Press enter to continue...");
-        //        Console.ReadLine();
-        //        return null;
-        //    }
-
-
     }
 
 }

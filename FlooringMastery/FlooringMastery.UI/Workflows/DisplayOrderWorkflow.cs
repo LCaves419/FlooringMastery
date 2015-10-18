@@ -43,22 +43,24 @@ namespace FlooringMastery.UI.Workflows
             do
             {
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("\nPLEASE CH0OSE AN ORDER NUMBER....");
+                Console.WriteLine("\t\nPLEASE CH0OSE AN ORDER NUMBER....");
                 string input = Console.ReadLine();
 
                 int OrderNumber;
 
                 if (int.TryParse(input, out OrderNumber))
                 {
+                    Console.Clear();
                     return OrderNumber;
                 }
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("That was not a valid entry....");
-                Console.WriteLine("Press enter to continue....");
+                Console.WriteLine("\tThat was not a valid entry....");
+                Console.WriteLine("\tPress enter to continue....");
                 Console.ReadLine();
 
 
             } while (true);
+
         }
 
         /// <summary>
@@ -67,31 +69,47 @@ namespace FlooringMastery.UI.Workflows
         /// <returns></returns>
         public string GetOrderDateFromUser()
         {
-            do
-            {
-                Console.Clear();
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Write("\n\tEnter an order date (mm/dd/yyyy):  ");
-                string input = Console.ReadLine();
+            OrderOperations ops = new OrderOperations();
 
-                DateTime OrderDate;
-                if (DateTime.TryParse(input, out OrderDate))
+            do
                 {
-                   OrderOperations ops = new OrderOperations();
-                   var formattedOrderDate= ops.GetOrderDate(OrderDate);
-                    if (formattedOrderDate == null)
+                    Console.Clear();
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write("\n\tEnter an order date (mm/dd/yyyy):  ");
+                    string input = Console.ReadLine();
+
+                    if (input.Length < 10)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("That was not a valid entry....");
                         Console.WriteLine("Press enter to continue...");
+                    ErrorLog log = new ErrorLog();
+                        log.ErrorMessage = "That was not a valid entry getOrderDateFromUser....";
+                        ops.CallingErrorLogRepository(log.ErrorMessage);
                         //TODO: enter error to error log
                         Console.ReadLine();
                     }
-                    return  formattedOrderDate;
-                }
-               
-            } while (true);
-        }
+                    else
+                    {
+                        DateTime OrderDate;
+                        if (DateTime.TryParse(input, out OrderDate))
+                        {
+                           
+                            var formattedOrderDate = ops.GetOrderDate(OrderDate);
+                            if (formattedOrderDate == null)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("That was not a valid entry....");
+                                Console.WriteLine("Press enter to continue...");
+                                //TODO: enter error to error log
+                                Console.ReadLine();
+                            }
+                            return formattedOrderDate;
+                        }
+                    }
+
+                } while (true); 
+            }
         /// <summary>
         /// checks to make sure they entered a number
         /// </summary>
@@ -115,6 +133,7 @@ namespace FlooringMastery.UI.Workflows
                 Console.WriteLine("That was not a valid entry....");
                 Console.WriteLine("Press enter to continue....");
                 Console.ReadLine();
+                DisplayOrderInformation(file, OrderNumber);
 
 
             } while (true);
@@ -127,27 +146,26 @@ namespace FlooringMastery.UI.Workflows
             //int num = GetOrderNumberFromUser();
             var response = ops.GetOrder(file, orderNumber);
             //_currentOrder = response.OrderInfo;
-
-            if (response.Success)
-            {
-                _currentOrder = response.OrderInfo;
-                PrintOrderInformation(response.OrderInfo);
-                return _currentOrder;
-
+                if (response.Success)
+                {
+                    _currentOrder = response.OrderInfo;
+                    PrintOrderInformation(response.OrderInfo);
+                    return _currentOrder;
                 }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Error occurred!!");
-                Console.WriteLine(response.Message);
-                Console.WriteLine("Press enter to continue...");
-                return null;
-            }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Error occurred!!");
+                    Console.WriteLine(response.Message);
+                    Console.WriteLine("Press enter to continue...");
+                    Console.ReadLine();
+                    GetOrderDateFromUser();
+                    return null;
+                }
         }
 
         public void PrintOrderInformation(Order orderInfo)
         {
-
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("\t**********************");
             Console.WriteLine("\t  Order Number {0}", orderInfo.OrderNumber);
@@ -165,7 +183,6 @@ namespace FlooringMastery.UI.Workflows
             Console.WriteLine("\t  Labor Cost: {0}", orderInfo.LaborCost);
             Console.WriteLine("\t  Tax: {0}", orderInfo.Tax);
             Console.WriteLine("\t  Total: {0:c}", orderInfo.Total);
-            Console.WriteLine("Press enter for Main Menu");
             Console.WriteLine();
         }
 
