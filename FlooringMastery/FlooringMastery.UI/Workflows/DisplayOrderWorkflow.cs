@@ -52,8 +52,12 @@ namespace FlooringMastery.UI.Workflows
 
                 if (int.TryParse(input, out OrderNumber))
                 {
-                    Console.Clear();
-                    return OrderNumber;
+                    // is this valid order
+                    if (ops.GetOrder(file, OrderNumber).Success)
+                    {
+                        Console.Clear();
+                        return OrderNumber;
+                    }
                 }
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("\tThat was not a valid entry....");
@@ -166,7 +170,7 @@ namespace FlooringMastery.UI.Workflows
                 log.ErrorMessage = "That was not a valid order UI:DisplayOrdererInfo....";
                 ops.CallingErrorLogRepository(log.ErrorMessage);
                 Console.ReadLine();
-                    GetOrderDateFromUser();
+                    //GetOrderNumberFromUser();//********************
                     return null;
                 }
         }
