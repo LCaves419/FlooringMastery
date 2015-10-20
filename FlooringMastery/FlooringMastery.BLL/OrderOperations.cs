@@ -148,7 +148,11 @@ namespace FlooringMastery.BLL
 
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns>   </returns>
         public decimal MatchState(string state)
         {
             bool isValid = false;
