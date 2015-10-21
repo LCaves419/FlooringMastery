@@ -58,6 +58,7 @@
   <ItemGroup>
     <Content Include="DataFiles\ProdFiles\Orders_06012013.txt" />
     <Content Include="DataFiles\ProdFiles\ErrorLog.txt" />
+    <Content Include="DataFiles\TestFiles\Orders_01012020.txt" />
     <Content Include="DataFiles\TestFiles\Orders_06012013.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
