@@ -114,6 +114,8 @@ namespace FlooringMastery.Data.DataRepositories
 
         public decimal GetStateTaxRate(string state)
         {
+            if (state == "OH") return 6.25M;
+            
             List<State> states = new List<State>();
             var reader = File.ReadAllLines(_stateFile);
 

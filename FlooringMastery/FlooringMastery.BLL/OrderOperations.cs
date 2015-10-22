@@ -15,17 +15,33 @@ namespace FlooringMastery.BLL
 {
     public class OrderOperations
     {
-        ErrorLog log = new ErrorLog();
+        private ErrorLog log = new ErrorLog();
       
-
         // private DateTime orderDate;
         private IDataRepository _repo;
+        private IErrorLogRepository _errorLogRepository;
+
 
         //our constructor
-        public OrderOperations()
+        public OrderOperations(IDataRepository dataRepository = null, IErrorLogRepository errorLogRepository = null)
         {
-            _repo = DataFactory.CreateDataRepository();
+            if (dataRepository != null)
+            {
+                _repo = dataRepository;
+            }
+            else
+            {
+                _repo = DataFactory.CreateDataRepository();
+            }
 
+            if (errorLogRepository != null)
+            {
+                _errorLogRepository = errorLogRepository;
+            }
+            else
+            {
+                _errorLogRepository = new ErrorLogRepository();
+            }
         }
         /// <summary>
         /// validates the order date exists
@@ -360,8 +376,8 @@ namespace FlooringMastery.BLL
 
         public void CallingErrorLogRepository(string strgMsg)
         {
-            ErrorLogRepository log = new ErrorLogRepository();
-            log.MyLogFile(strgMsg);
+            
+            _errorLogRepository.MyLogFile(strgMsg);
         }
 
         public bool ValidateInput(char[] input)

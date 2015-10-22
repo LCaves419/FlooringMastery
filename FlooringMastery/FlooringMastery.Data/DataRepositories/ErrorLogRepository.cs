@@ -8,7 +8,15 @@ using FlooringMastery.Models;
 
 namespace FlooringMastery.Data.DataRepositories
 {
-   public  class ErrorLogRepository
+    public interface IErrorLogRepository
+    {
+        /// <summary>
+        /// The MyLogFile method is used to document details of each test run.
+        /// </summary>
+        void MyLogFile( string strMessage);
+    }
+
+    public  class ErrorLogRepository : IErrorLogRepository
     {
         private string fileName;
 
